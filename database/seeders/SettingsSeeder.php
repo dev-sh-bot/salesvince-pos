@@ -14,7 +14,7 @@ class SettingsSeeder extends Seeder
     {
         
         $data = [
-            ['key' => 'app_name', 'value' => 'INPL POS'],
+            ['key' => 'app_name', 'value' => 'Salevince POS'],
             ['key' => 'app_description', 'value' => 'POINT OF SALE'],
             ['key' => 'currency_symbol', 'value' => 'PKR'],
             ['key' => 'warning_quantity', 'value' => 10],

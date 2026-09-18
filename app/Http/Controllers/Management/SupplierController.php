@@ -21,7 +21,7 @@ class SupplierController extends Controller
 
     public function index(Request $request)
     {
-        $suppliers = Supplier::latest()->paginate();
+        $suppliers = Supplier::latest()->paginate(25);
 
         if ($request->wantsJson()) {
             return response()->json($suppliers);

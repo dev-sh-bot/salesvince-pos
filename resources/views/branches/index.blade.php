@@ -13,6 +13,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+        <div class="table-responsive snd-table-scroll">
         <table class="table">
             <thead>
                 <tr>
@@ -84,7 +85,8 @@
                 @endforelse
             </tbody>
         </table>
-        {{ $branches->render() }}
+        </div>
+        <x-snd-pagination :paginator="$branches" />
     </div>
 </div>
 @endsection

@@ -26,7 +26,7 @@ class CommonHelper
      */
     public static function getBrandName()
     {
-        return config('settings.app_name', config('app.name', 'INPL POS'));
+        return config('settings.app_name', config('app.name', 'Salevince POS'));
     }
 
     /**
@@ -75,7 +75,7 @@ class CommonHelper
                 <div class="thanks-title">*** THANK YOU FOR VISITING ***</div>
                 <div class="thanks-sub">' .e(CommonHelper::getBrandName()) . ' — Luxury Salon</div>
                 <div class="receipt-notice">Please retain this receipt for any queries.</div>
-                <div class="receipt-software">Powered by INPL-POS | Printed on ' . e($dateStr) . '</div>
+                <div class="receipt-software">Powered by Salevince POS | Printed on ' . e($dateStr) . '</div>
             </div>
         ';
     }

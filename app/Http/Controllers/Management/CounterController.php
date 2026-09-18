@@ -28,7 +28,7 @@ class CounterController extends Controller
             ->withCount('users')
             ->when($request->input('branch_id'), fn ($q, $id) => $q->where('branch_id', $id))
             ->latest()
-            ->paginate(15);
+            ->paginate(25);
 
         $branches = Branch::where('is_active', true)->orderBy('name')->get();
 

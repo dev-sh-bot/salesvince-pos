@@ -11,7 +11,7 @@
             @method('PUT')
 
             <div class="snd-form-section-heading">
-                <x-snd-icon name="sparkles" />
+                <x-snd-icon name="briefcase" />
                 <div>
                     <h3>Service Details</h3>
                     <p>Set the service information used when creating a POS order.</p>

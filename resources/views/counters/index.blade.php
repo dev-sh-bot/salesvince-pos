@@ -31,6 +31,7 @@
             @endif
         </form>
 
+        <div class="table-responsive snd-table-scroll">
         <table class="table">
             <thead>
                 <tr>
@@ -98,7 +99,8 @@
                 @endforelse
             </tbody>
         </table>
-        {{ $counters->render() }}
+        </div>
+        <x-snd-pagination :paginator="$counters" />
     </div>
 </div>
 @endsection

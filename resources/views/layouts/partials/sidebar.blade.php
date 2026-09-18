@@ -41,7 +41,7 @@
                 @can('services.view')
                     <li class="nav-item" data-label="Services">
                         <a href="{{ route('services.index') }}" class="nav-link {{ activeSegment('services') }}" data-tooltip="Services" title="Services">
-                            <x-snd-icon name="sparkles" class="nav-icon" /><p>Services</p>
+                            <x-snd-icon name="briefcase" class="nav-icon" /><p>Services</p>
                         </a>
                     </li>
                 @endcan
@@ -70,7 +70,7 @@
                 @can('purchases.view')
                     <li class="nav-item {{ request()->routeIs('purchases.*') ? 'menu-open' : '' }}" data-label="{{ __('Purchases') }}">
                         <a href="#" class="nav-link {{ activeSegment('purchases') }}" data-tooltip="{{ __('Purchases') }}" title="{{ __('Purchases') }}" aria-haspopup="true">
-                            <x-snd-icon name="truck" class="nav-icon" /><p>{{ __('Purchases') }}</p><x-snd-icon name="chevron-down" class="right" />
+                            <x-snd-icon name="shopping-bag" class="nav-icon" /><p>{{ __('Purchases') }}</p><x-snd-icon name="chevron-down" class="right" />
                         </a>
                         <ul class="nav nav-treeview" data-header="{{ __('Purchases') }}">
                             @can('purchases.create')

@@ -31,7 +31,7 @@ class OrderController extends Controller
                 $query->where('created_at', '<=', $endDate . ' 23:59:59');
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(25);
 
         $total = $orders->sum(fn($order) => $order->total());
         $receivedAmount = $orders->sum(fn($order) => $order->receivedAmount());

@@ -33,7 +33,7 @@ class ProductController extends Controller
         $products = Product::query()
             ->search($request->search)
             ->latest()
-            ->paginate(10);
+            ->paginate(25);
 
         return $request->wantsJson()
             ? response()->json($products)

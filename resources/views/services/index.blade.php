@@ -11,6 +11,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+        <div class="table-responsive snd-table-scroll">
         <table class="table">
             <thead>
                 <tr>
@@ -47,7 +48,7 @@
                 <tr class="snd-empty-row">
                     <td colspan="8" class="snd-table-empty-cell">
                         <x-snd-empty-state
-                            icon="sparkles"
+                            icon="briefcase"
                             message="No services found."
                             :url="route('services.create')"
                             action-label="Create First Service"
@@ -57,7 +58,8 @@
                 @endforelse
             </tbody>
         </table>
-        {{ $services->render() }}
+        </div>
+        <x-snd-pagination :paginator="$services" />
     </div>
 </div>
 @endsection

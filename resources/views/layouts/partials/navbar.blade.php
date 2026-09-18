@@ -15,7 +15,7 @@
 
         <div class="nav-item dropdown">
             <a class="snd-icon-button d-inline-flex align-items-center justify-content-center" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Language">
-                <x-snd-icon name="globe" />
+                <x-snd-icon name="languages" />
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-label="Language">
                 <div class="px-2 py-1 text-uppercase" style="font-size:.58rem;color:var(--snd-muted);font-weight:600;letter-spacing:.12em;">Language</div>

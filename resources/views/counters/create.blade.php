@@ -17,7 +17,7 @@
                     @csrf
 
                     <div class="snd-form-section-heading">
-                        <x-snd-icon name="receipt" />
+                        <x-snd-icon name="monitor" />
                         <div>
                             <h3>Counter Details</h3>
                             <p>Set up a checkout counter and its POS access password.</p>

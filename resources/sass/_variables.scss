@@ -1,4 +1,4 @@
-// INPL POS / SND visual system tokens.
+// Salevince POS / SND visual system tokens.
 // Bootstrap consumes these values during compilation; the CSS custom
 // properties are declared in app.scss so runtime components can share them.
 
@@ -12,7 +12,7 @@ $headings-font-family: $snd-font-family;
 $font-size-base: 0.875rem;
 $line-height-base: 1.55;
 
-// SND primary palette, retained as the INPL POS accent.
+// SND primary palette, retained as the Salevince POS accent.
 $pos-primary:       #9786ee;
 $pos-primary-dark:  #806fda;
 $pos-primary-deep:  #6758bd;

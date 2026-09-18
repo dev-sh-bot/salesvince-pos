@@ -33,7 +33,7 @@ class PurchaseController extends Controller
         $purchases = Purchase::with(['supplier', 'user', 'items'])
             ->filter($request->only(['status', 'supplier_id', 'date_from', 'date_to', 'search']))
             ->orderBy($request->get('sort_by', 'purchase_date'), $request->get('sort_order', 'desc'))
-            ->paginate(10)
+            ->paginate(25)
             ->withQueryString();
 
         $suppliers = Supplier::orderBy('first_name')->get();
@@ -51,7 +51,7 @@ class PurchaseController extends Controller
                 ->withCount('items')
                 ->filter($request->only(['status', 'supplier_id', 'date_from', 'date_to', 'search']))
                 ->orderBy($request->get('sort_by', 'purchase_date'), $request->get('sort_order', 'desc'))
-                ->paginate(10);
+                ->paginate(25);
 
             return response()->json($purchases);
         } catch (\Exception $e) {

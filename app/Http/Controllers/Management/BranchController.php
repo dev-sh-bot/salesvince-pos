@@ -23,7 +23,7 @@ class BranchController extends Controller
 
     public function index(): View
     {
-        $branches = Branch::withCount(['counters', 'users'])->latest()->paginate(15);
+        $branches = Branch::withCount(['counters', 'users'])->latest()->paginate(25);
 
         return view('branches.index', compact('branches'));
     }

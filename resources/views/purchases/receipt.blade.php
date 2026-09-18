@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    @include('layouts.partials.favicon')
     <title>Purchase Receipt #{{ $purchase->id }}</title>
     <style>
         * {

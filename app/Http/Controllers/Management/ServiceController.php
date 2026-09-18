@@ -29,7 +29,7 @@ class ServiceController extends Controller
         $services = Service::query()
             ->when($request->search, fn ($query, $term) => $query->where('name', 'like', "%{$term}%"))
             ->latest()
-            ->paginate(10);
+            ->paginate(25);
 
         return $request->wantsJson()
             ? response()->json($services)

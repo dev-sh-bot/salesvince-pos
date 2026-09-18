@@ -15,7 +15,7 @@ export const CommonHelper = {
      * Get Business Name / Brand Title
      */
     getBrandName() {
-        return (window.APP && window.APP.app_name) ? window.APP.app_name : "INPL POS";
+        return (window.APP && window.APP.app_name) ? window.APP.app_name : "Salevince POS";
     },
 
     /**
@@ -63,7 +63,7 @@ export const CommonHelper = {
                 <div class="thanks-title">*** THANK YOU FOR VISITING ***</div>
                 <div class="thanks-sub">${window.APP.app_name} — Luxury Salon & Spa</div>
                 <div class="receipt-notice">Please retain this receipt for any queries.</div>
-                <div class="receipt-software">Powered by INPL-POS | Printed on ${dateStr}</div>
+                <div class="receipt-software">Powered by Salevince POS | Printed on ${dateStr}</div>
             </div>
         `;
     },

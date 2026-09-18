@@ -350,7 +350,7 @@
         </div>
         <div class="quick-actions">
             <a href="{{ route('cart.index') }}" class="btn-quick-action btn-pos-quick">
-                <x-snd-icon name="receipt" /> Open POS Terminal
+                <x-snd-icon name="shopping-cart" /> Open POS Terminal
             </a>
             <a href="{{ route('products.create') }}" class="btn-quick-action btn-secondary-quick">
                 <x-snd-icon name="plus" /> Add Product
@@ -457,7 +457,7 @@
                     <h4><x-snd-icon name="shopping-bag" style="color: #2a69b0;" /> Latest Transactions</h4>
                     <a href="{{ route('orders.index') }}" class="btn btn-xs" style="background: #f0f6ff; border: 1px solid #d0e4f5; color: #2a69b0; border-radius: 8px; font-weight: 500;">View All Orders</a>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive snd-table-scroll">
                     <table class="table table-modern">
                         <thead>
                             <tr>
@@ -568,7 +568,7 @@
                     <h4><x-snd-icon name="table" style="color: #2a69b0;" /> Monthly Financial Breakdown</h4>
                     <span class="badge-tag">Audited Log</span>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive snd-table-scroll">
                     <table class="table table-modern">
                         <thead>
                             <tr>

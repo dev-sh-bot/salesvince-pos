@@ -36,6 +36,7 @@
 
     <div class="card">
         <div class="card-body">
+            <div class="table-responsive snd-table-scroll">
             <table class="table">
                 <thead>
                 <tr>
@@ -99,7 +100,7 @@
                                 data-received="{{ $orderReceived }}"
                                 data-items="{{ base64_encode($order->items->toJson()) }}"
                                 data-created-at="{{ $order->created_at }}">
-                                <ion-icon size="small" name="eye"></ion-icon>
+                                <x-snd-icon name="eye" />
                             </button>
                             <button
                                 type="button"
@@ -125,12 +126,15 @@
                             </button>
 
                             @if($orderRemaining > 0)
-                                <button class="btn btn-sm btn-primary btnPartialPayment"
+                                <button type="button"
+                                        class="btn btn-sm btn-primary btnPartialPayment"
                                         data-toggle="modal"
                                         data-target="#partialPaymentModal"
                                         data-order-id="{{ $order->id }}"
-                                        data-remaining-amount="{{ $orderRemaining }}">
-                                    Pay Partial
+                                        data-remaining-amount="{{ $orderRemaining }}"
+                                        title="Pay partial amount"
+                                        aria-label="Pay partial amount">
+                                    <x-snd-icon name="wallet" />
                                 </button>
                             @endif
                         </td>
@@ -163,7 +167,8 @@
                 </tr>
                 </tfoot>
             </table>
-            {{ $orders->render() }}
+            </div>
+            <x-snd-pagination :paginator="$orders" />
         </div>
     </div>
 

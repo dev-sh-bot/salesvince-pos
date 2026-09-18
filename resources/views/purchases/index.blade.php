@@ -112,7 +112,7 @@
         <!-- Purchases Table Card -->
         <div class="card" x-show="!loading" x-transition>
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table-responsive snd-table-scroll">
                     <table class="table table-hover mb-0">
                         <thead>
                         <tr>
@@ -165,7 +165,7 @@
                                         </template>
                                     </td>
                                     <td>
-                                        <div class="btn-group btn-group-sm">
+                                        <div class="btn-group btn-group-sm snd-table-actions">
                                             <a :href="`/admin/purchases/${purchase.id}`" class="btn btn-info" title="{{ __('View') }}">
                                                 <x-snd-icon name="eye" />
                                             </a>
@@ -201,19 +201,33 @@
             </div>
 
             <!-- Pagination -->
-            <div class="card-footer" x-show="purchases.last_page > 1">
-                <nav>
-                    <ul class="pagination pagination-sm m-0 float-right">
-                        <template x-for="page in paginationPages" :key="page">
-                            <li class="page-item" :class="{ 'active': page === purchases.current_page, 'disabled': page === '...' }">
-                                <a class="page-link"
-                                   href="#"
-                                   @click.prevent="page !== '...' && changePage(page)"
-                                   x-text="page"></a>
-                            </li>
-                        </template>
-                    </ul>
-                </nav>
+            <div class="card-footer snd-pagination-footer" x-show="purchases.last_page > 1">
+                <div class="snd-pagination">
+                    <p class="snd-pagination-summary">
+                        {{ __('Showing') }}
+                        <strong x-text="purchases.from || 0"></strong>
+                        {{ __('to') }}
+                        <strong x-text="purchases.to || 0"></strong>
+                        {{ __('of') }}
+                        <strong x-text="purchases.total || 0"></strong>
+                        {{ __('results') }}
+                    </p>
+
+                    <div class="snd-pagination-nav">
+                        <nav aria-label="Pagination Navigation">
+                            <ul class="pagination pagination-sm">
+                                <template x-for="page in paginationPages" :key="page">
+                                    <li class="page-item" :class="{ 'active': page === purchases.current_page, 'disabled': page === '...' }">
+                                        <a class="page-link"
+                                           href="#"
+                                           @click.prevent="page !== '...' && changePage(page)"
+                                           x-text="page"></a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
