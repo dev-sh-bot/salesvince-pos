@@ -338,94 +338,435 @@
         font-weight: 600;
         color: #1a1a1a;
     }
+
+    /* Dashboard overview layout: KPI rail, centered analytics, quick options. */
+    .dashboard-container {
+        padding-bottom: 32px;
+    }
+
+    .dashboard-hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 16px;
+        padding: 22px 24px;
+        border: 1px solid var(--snd-border);
+        border-radius: var(--snd-radius-xl);
+        background: linear-gradient(135deg, rgba(255, 255, 255, .92), rgba(246, 243, 255, .86));
+        box-shadow: var(--snd-shadow);
+    }
+
+    .dashboard-hero-copy { min-width: 0; }
+    .dashboard-eyebrow {
+        margin-bottom: 7px;
+        color: var(--snd-primary-deep);
+        font-size: .62rem;
+        font-weight: 600;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+    }
+    .dashboard-hero h2 {
+        margin: 0 0 4px;
+        color: var(--snd-ink);
+        font-size: 1.55rem;
+        font-weight: 600;
+        letter-spacing: -.035em;
+    }
+    .dashboard-hero p {
+        max-width: 680px;
+        margin: 0;
+        color: var(--snd-muted);
+        font-size: .78rem;
+    }
+    .dashboard-hero-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex: 0 0 auto;
+        padding: 8px 11px;
+        border: 1px solid rgba(151, 134, 238, .2);
+        border-radius: 10px;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
+        font-size: .66rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .dashboard-quick-options {
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+    .dashboard-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 15px 18px 12px;
+        border-bottom: 1px solid var(--snd-border);
+    }
+    .dashboard-section-header h3 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        color: var(--snd-ink);
+        font-size: .85rem;
+        font-weight: 600;
+    }
+    .dashboard-section-header h3 svg { color: var(--snd-primary-deep); }
+    .dashboard-section-header p {
+        margin: 3px 0 0;
+        color: var(--snd-muted);
+        font-size: .68rem;
+    }
+    .dashboard-section-tag {
+        padding: 5px 9px;
+        border: 1px solid rgba(151, 134, 238, .22);
+        border-radius: 8px;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
+        font-size: .6rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .dashboard-quick-options-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        padding: 14px 16px 16px;
+    }
+    .dashboard-quick-action {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        min-height: 68px;
+        padding: 11px 12px;
+        border: 1px solid var(--snd-border);
+        border-radius: var(--snd-radius-md);
+        background: rgba(255, 255, 255, .72);
+        color: var(--snd-ink-soft) !important;
+        transition: border-color .16s ease, background .16s ease, transform .16s ease, box-shadow .16s ease;
+    }
+    .dashboard-quick-action:hover {
+        border-color: rgba(151, 134, 238, .38);
+        background: var(--snd-primary-soft);
+        box-shadow: 0 8px 18px rgba(151, 134, 238, .1);
+        color: var(--snd-ink) !important;
+        transform: translateY(-1px);
+    }
+    .dashboard-quick-action-primary {
+        border-color: transparent;
+        background: var(--snd-primary);
+        color: #fff !important;
+        box-shadow: 0 8px 18px rgba(151, 134, 238, .2);
+    }
+    .dashboard-quick-action-primary:hover {
+        border-color: transparent;
+        background: var(--snd-primary-hover);
+        color: #fff !important;
+    }
+    .dashboard-quick-action-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 31px;
+        height: 31px;
+        flex: 0 0 31px;
+        border-radius: 10px;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
+    }
+    .dashboard-quick-action-primary .dashboard-quick-action-icon {
+        background: rgba(255, 255, 255, .2);
+        color: #fff;
+    }
+    .dashboard-quick-action-copy {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-direction: column;
+        gap: 2px;
+    }
+    .dashboard-quick-action-copy strong {
+        overflow: hidden;
+        color: inherit;
+        font-size: .72rem;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .dashboard-quick-action-copy small {
+        overflow: hidden;
+        color: var(--snd-muted);
+        font-size: .6rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .dashboard-quick-action-primary .dashboard-quick-action-copy small { color: rgba(255, 255, 255, .78); }
+    .dashboard-quick-arrow { flex: 0 0 auto; color: var(--snd-muted); }
+    .dashboard-quick-action-primary .dashboard-quick-arrow { color: rgba(255, 255, 255, .82); }
+
+    .dashboard-overview-grid {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1.5fr) minmax(320px, 1fr);
+        gap: 16px;
+        align-items: stretch;
+        margin-bottom: 16px;
+    }
+    .dashboard-main-grid { display: contents; }
+    .dashboard-overview-grid .dashboard-hero {
+        grid-column: 2;
+        grid-row: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+    .dashboard-overview-grid .dashboard-quick-options {
+        grid-column: 3;
+        grid-row: 1;
+        margin-bottom: 0 !important;
+    }
+    .dashboard-overview-grid .dashboard-quick-options-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 12px;
+    }
+    .dashboard-overview-grid .dashboard-quick-action { min-height: 60px; padding: 8px; gap: 7px; }
+    .dashboard-overview-grid .dashboard-quick-action-copy strong,
+    .dashboard-overview-grid .dashboard-quick-action-copy small { white-space: normal; }
+    .dashboard-overview-grid .dashboard-quick-arrow { display: none; }
+    .dashboard-kpi-rail {
+        display: grid;
+        grid-column: 1;
+        grid-row: 1 / 3;
+        grid-template-rows: auto repeat(4, minmax(112px, 1fr));
+        gap: 10px;
+        min-width: 0;
+    }
+    .dashboard-kpi-rail-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 42px;
+        padding: 0 13px;
+        border: 1px solid var(--snd-border);
+        border-radius: var(--snd-radius-md);
+        background: var(--snd-surface-solid);
+        box-shadow: var(--snd-shadow);
+        color: var(--snd-ink);
+        font-size: .78rem;
+        font-weight: 600;
+    }
+    .dashboard-kpi-rail-caption {
+        color: var(--snd-muted);
+        font-size: .58rem;
+        font-weight: 500;
+    }
+    .dashboard-kpi-card {
+        min-height: 112px;
+        height: auto;
+        padding: 15px 16px;
+        border: 1px solid var(--snd-border) !important;
+        border-radius: var(--snd-radius-lg);
+        background: var(--snd-surface-solid) !important;
+        box-shadow: var(--snd-shadow);
+        color: var(--snd-ink) !important;
+    }
+    .dashboard-kpi-card:hover {
+        border-color: rgba(151, 134, 238, .28) !important;
+        box-shadow: var(--snd-shadow-hover);
+        transform: translateY(-2px);
+    }
+    .dashboard-kpi-card .metric-header { margin-bottom: 12px; align-items: center; }
+    .dashboard-kpi-card .icon-bubble {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: var(--snd-primary-soft) !important;
+        color: var(--snd-primary-deep) !important;
+        font-size: .95rem;
+    }
+    .dashboard-kpi-card .metric-pill {
+        padding: 4px 8px;
+        border-radius: 7px;
+        background: var(--snd-primary-soft) !important;
+        color: var(--snd-primary-deep) !important;
+        font-size: .56rem;
+        letter-spacing: .06em;
+    }
+    .dashboard-kpi-card h3 {
+        margin-bottom: 3px;
+        color: var(--snd-ink) !important;
+        font-size: 1.28rem;
+        font-weight: 600;
+    }
+    .dashboard-kpi-card p {
+        color: var(--snd-muted) !important;
+        font-size: .67rem;
+        font-weight: 500;
+    }
+    .dashboard-analytics-column,
+    .dashboard-category-column { min-width: 0; }
+    .dashboard-analytics-column { grid-column: 2; grid-row: 2; }
+    .dashboard-category-column { grid-column: 3; grid-row: 2; }
+    .dashboard-main-grid .widget-card { height: 100%; margin-bottom: 0 !important; display: flex; flex-direction: column; }
+    .dashboard-main-grid .widget-header { min-height: 70px; gap: 10px; flex-shrink: 0; }
+    .dashboard-main-grid .widget-header { padding: 15px 17px; }
+    .dashboard-main-grid .widget-header h4 { font-size: .82rem; }
+    .dashboard-main-grid .chart-container-lg,
+    .dashboard-main-grid .chart-container-sm {
+        flex: 1 1 auto;
+        height: 377px;
+        min-height: 377px;
+        padding: 18px 16px 16px;
+    }
+
+    .dashboard-equal-row > [class*="col-"] { display: flex; min-width: 0; }
+    .dashboard-equal-row .widget-card { width: 100%; display: flex; flex-direction: column; }
+    .dashboard-equal-row .widget-header { min-height: 58px; flex-shrink: 0; gap: 10px; }
+    .dashboard-equal-row .widget-card > .p-3:not(.border-top) { flex: 1; }
+    .dashboard-financial-row .snd-table-scroll { max-height: 350px; overflow: auto; }
+    .dashboard-financial-row .widget-card > .p-3 { display: flex; flex-direction: column; justify-content: space-between; }
+
+    @media (max-width: 1399.98px) {
+        .dashboard-overview-grid { grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr); }
+        .dashboard-analytics-column { grid-column: 2 / 4; }
+        .dashboard-category-column { grid-column: 2 / 4; grid-row: 3; }
+        .dashboard-overview-grid .dashboard-quick-options-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767.98px) {
+        .dashboard-overview-grid { grid-template-columns: 1fr; }
+        .dashboard-overview-grid .dashboard-hero,
+        .dashboard-overview-grid .dashboard-quick-options,
+        .dashboard-kpi-rail,
+        .dashboard-analytics-column,
+        .dashboard-category-column { grid-column: 1; grid-row: auto; }
+        .dashboard-hero { align-items: flex-start; flex-direction: column; padding: 18px; }
+        .dashboard-hero-status { align-self: flex-start; }
+        .dashboard-overview-grid .dashboard-quick-options-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .dashboard-kpi-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+        .dashboard-kpi-rail-heading { grid-column: 1 / -1; }
+    }
+    @media (max-width: 575.98px) {
+        .dashboard-overview-grid .dashboard-quick-options-grid,
+        .dashboard-kpi-rail { grid-template-columns: 1fr; }
+        .dashboard-section-header { align-items: flex-start; }
+        .dashboard-section-tag { display: none; }
+        .dashboard-main-grid .chart-container-lg,
+        .dashboard-main-grid .chart-container-sm { height: 300px; min-height: 300px; }
+    }
 </style>
 
 <div class="dashboard-container">
+    <div class="dashboard-overview-grid">
 
-    {{-- ''‚''‚¬ 1. Welcome & Quick Action Header ''‚''‚¬ --}}
-    <div class="welcome-banner">
-        <div class="welcome-title">
-            <h2>Welcome back, {{ auth()->user()->first_name ?? 'Admin' }}!</h2>
+    {{-- 1. Dashboard welcome panel --}}
+    <section class="dashboard-hero" aria-labelledby="dashboard-welcome-title">
+        <div class="dashboard-hero-copy">
+            <div class="dashboard-eyebrow">Salevince POS · Operations overview</div>
+            <h2 id="dashboard-welcome-title">Welcome back, {{ auth()->user()->first_name ?? 'Admin' }}!</h2>
             <p>Here's a comprehensive overview of your sales performance, orders, and real-time inventory.</p>
         </div>
-        <div class="quick-actions">
-            <a href="{{ route('cart.index') }}" class="btn-quick-action btn-pos-quick">
-                <x-snd-icon name="shopping-cart" /> Open POS Terminal
+        <div class="dashboard-hero-status">
+            <x-snd-icon name="chart-line" />
+            <span>Live dashboard</span>
+        </div>
+    </section>
+
+    {{-- 2. Quick options --}}
+    <section class="dashboard-quick-options widget-card" aria-labelledby="dashboard-quick-options-title">
+        <div class="dashboard-section-header">
+            <div>
+                <h3 id="dashboard-quick-options-title"><x-snd-icon name="zap" /> Quick Options</h3>
+                <p>Jump into your most-used POS workflows.</p>
+            </div>
+            <span class="dashboard-section-tag">Shortcuts</span>
+        </div>
+        <div class="dashboard-quick-options-grid">
+            <a href="{{ route('cart.index') }}" class="dashboard-quick-action dashboard-quick-action-primary">
+                <span class="dashboard-quick-action-icon"><x-snd-icon name="shopping-cart" /></span>
+                <span class="dashboard-quick-action-copy"><strong>Open POS Terminal</strong><small>Start a new sale</small></span>
+                <x-snd-icon name="chevron-right" class="dashboard-quick-arrow" />
             </a>
-            <a href="{{ route('products.create') }}" class="btn-quick-action btn-secondary-quick">
-                <x-snd-icon name="plus" /> Add Product
+            <a href="{{ route('products.create') }}" class="dashboard-quick-action">
+                <span class="dashboard-quick-action-icon"><x-snd-icon name="plus" /></span>
+                <span class="dashboard-quick-action-copy"><strong>Add Product</strong><small>Update your catalog</small></span>
+                <x-snd-icon name="chevron-right" class="dashboard-quick-arrow" />
             </a>
-            <a href="{{ route('customers.create') }}" class="btn-quick-action btn-secondary-quick">
-                <x-snd-icon name="user-plus" /> New Customer
+            <a href="{{ route('customers.create') }}" class="dashboard-quick-action">
+                <span class="dashboard-quick-action-icon"><x-snd-icon name="user-plus" /></span>
+                <span class="dashboard-quick-action-copy"><strong>New Customer</strong><small>Register a customer</small></span>
+                <x-snd-icon name="chevron-right" class="dashboard-quick-arrow" />
             </a>
-            <a href="{{ route('orders.index') }}" class="btn-quick-action btn-secondary-quick">
-                <x-snd-icon name="receipt" /> Orders List
+            <a href="{{ route('orders.index') }}" class="dashboard-quick-action">
+                <span class="dashboard-quick-action-icon"><x-snd-icon name="receipt" /></span>
+                <span class="dashboard-quick-action-copy"><strong>Orders List</strong><small>Review recent sales</small></span>
+                <x-snd-icon name="chevron-right" class="dashboard-quick-arrow" />
             </a>
         </div>
-    </div>
+    </section>
 
-    {{-- ''‚''‚¬ 2. Top Metric Cards ''‚''‚¬ --}}
-    <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-md-6 mb-3 mb-xl-0">
-            <div class="metric-card card-today">
+    {{-- 3. KPI rail and centered analytics --}}
+    <section class="dashboard-main-grid" aria-label="Dashboard overview">
+        <aside class="dashboard-kpi-rail" aria-label="Sales overview">
+            <div class="dashboard-kpi-rail-heading">
+                <span>Sales overview</span>
+                <span class="dashboard-kpi-rail-caption">Live</span>
+            </div>
+
+            <div class="metric-card dashboard-kpi-card card-today">
                 <div class="metric-header">
                     <div class="icon-bubble"><x-snd-icon name="zap" /></div>
-                    <span class="metric-pill">Daily Revenue</span>
+                    <span class="metric-pill">Today</span>
                 </div>
                 <div>
                     <h3>{{ config('settings.currency_symbol') }} {{ number_format($sales_today, 2) }}</h3>
-                    <p>Today's Sales ({{ $orders_today }} orders)</p>
+                    <p>{{ $orders_today }} orders today</p>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-6 mb-3 mb-xl-0">
-            <div class="metric-card card-week">
+            <div class="metric-card dashboard-kpi-card card-week">
                 <div class="metric-header">
-                    <div class="icon-bubble" style="background: rgba(42,105,176,0.2);"><x-snd-icon name="chart-line" style="color: #2a69b0;" /></div>
-                    <span class="metric-pill" style="background: rgba(42,105,176,0.2); color: #2a69b0;">This Week</span>
+                    <div class="icon-bubble"><x-snd-icon name="chart-line" /></div>
+                    <span class="metric-pill">This week</span>
                 </div>
                 <div>
                     <h3>{{ config('settings.currency_symbol') }} {{ number_format($sales_week, 2) }}</h3>
-                    <p>Weekly Volume ({{ $orders_week }} orders)</p>
+                    <p>{{ $orders_week }} orders this week</p>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-6 mb-3 mb-xl-0">
-            <div class="metric-card card-month">
+            <div class="metric-card dashboard-kpi-card card-month">
                 <div class="metric-header">
                     <div class="icon-bubble"><x-snd-icon name="calendar-days" /></div>
-                    <span class="metric-pill">{{ $mom_growth >= 0 ? '+' : '' }}{{ $mom_growth }}% MoM</span>
+                    <span class="metric-pill">This month</span>
                 </div>
                 <div>
                     <h3>{{ config('settings.currency_symbol') }} {{ number_format($sales_month, 2) }}</h3>
-                    <p>Monthly Sales ({{ $orders_month }} orders)</p>
+                    <p>{{ $orders_month }} orders this month</p>
                 </div>
             </div>
-        </div>
 
-        <div class="col-xl-3 col-md-6">
-            <div class="metric-card card-customers">
+            <div class="metric-card dashboard-kpi-card card-customers">
                 <div class="metric-header">
-                    <div class="icon-bubble" style="background: rgba(42,105,176,0.2);"><x-snd-icon name="users" style="color: #2a69b0;" /></div>
-                    <span class="metric-pill" style="background: rgba(42,105,176,0.2); color: #2a69b0;">Customer Hub</span>
+                    <div class="icon-bubble"><x-snd-icon name="users" /></div>
+                    <span class="metric-pill">Customers</span>
                 </div>
                 <div>
-                    <h3>{{ $customers_count }} Registered</h3>
-                    <p>{{ $orders_count }} Total Completed Orders</p>
+                    <h3>{{ $customers_count }}</h3>
+                    <p>{{ $orders_count }} completed orders</p>
                 </div>
             </div>
-        </div>
-    </div>
+        </aside>
 
-    {{-- ''‚''‚¬ 3. Visual Charts Row ''‚''‚¬ --}}
-    <div class="row">
-        {{-- Main Revenue & Order Trends --}}
-        <div class="col-lg-8">
+        <div class="dashboard-analytics-column">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="chart-area" style="color: #2a69b0;" /> 12-Month Revenue & Orders Trajectory</h4>
+                    <h4><x-snd-icon name="chart-area" style="color: var(--snd-primary-deep);" /> 12-Month Revenue & Orders Trajectory</h4>
                     <span class="badge-tag">Past 12 Months Analytics</span>
                 </div>
                 <div class="chart-container-lg">
@@ -434,11 +775,10 @@
             </div>
         </div>
 
-        {{-- Service & Product Breakdown --}}
-        <div class="col-lg-4">
+        <div class="dashboard-category-column">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="chart-pie" style="color: #2a69b0;" /> Category & Service Share</h4>
+                    <h4><x-snd-icon name="chart-pie" style="color: var(--snd-primary-deep);" /> Category & Service Share</h4>
                     <span class="badge-tag">Volume Distribution</span>
                 </div>
                 <div class="chart-container-sm">
@@ -446,10 +786,12 @@
                 </div>
             </div>
         </div>
+    </section>
+
     </div>
 
     {{-- ''‚''‚¬ 4. Real-time Operations Row ''‚''‚¬ --}}
-    <div class="row">
+    <div class="row dashboard-equal-row">
         {{-- Recent Orders Feed --}}
         <div class="col-lg-7">
             <div class="widget-card">
@@ -560,7 +902,7 @@
     </div>
 
     {{-- ''‚''‚¬ 5. Financial Breakdown & POS Summary Row ''‚''‚¬ --}}
-    <div class="row">
+    <div class="row dashboard-equal-row dashboard-financial-row">
         {{-- Detailed Monthly Breakdown --}}
         <div class="col-lg-8">
             <div class="widget-card">
