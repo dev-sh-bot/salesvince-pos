@@ -20,7 +20,7 @@
                         <x-snd-icon name="git-branch" />
                         <div>
                             <h3>Branch Details</h3>
-                            <p>Set up a Salevince POS location and its access controls.</p>
+                            <p>Set up a {{ \App\Helpers\CommonHelper::getBrandName() }} location and its access controls.</p>
                         </div>
                     </div>
 

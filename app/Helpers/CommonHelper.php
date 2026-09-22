@@ -70,12 +70,13 @@ class CommonHelper
     public static function getReceiptFooterHTML($createdAt = null)
     {
         $dateStr = $createdAt ?? date('Y-m-d H:i:s');
+        $brandName = self::getBrandName();
         return '
             <div class="receipt-footer">
                 <div class="thanks-title">*** THANK YOU FOR VISITING ***</div>
-                <div class="thanks-sub">' .e(CommonHelper::getBrandName()) . ' — Luxury Salon</div>
+                <div class="thanks-sub">' . e($brandName) . ' — Luxury Salon</div>
                 <div class="receipt-notice">Please retain this receipt for any queries.</div>
-                <div class="receipt-software">Powered by Salevince POS | Printed on ' . e($dateStr) . '</div>
+                <div class="receipt-software">Powered by ' . e($brandName) . ' | Printed on ' . e($dateStr) . '</div>
             </div>
         ';
     }

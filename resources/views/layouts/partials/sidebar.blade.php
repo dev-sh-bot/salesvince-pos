@@ -1,6 +1,6 @@
 @php
-    $brandName = 'Salevince POS';
-    $brandSubtitle = 'POINT OF SALE';
+    $brandName = trim(\App\Helpers\CommonHelper::getBrandName());
+    $brandSubtitle = trim(\App\Helpers\CommonHelper::getBrandSubtitle());
 @endphp
 
 <aside class="main-sidebar snd-sidebar" id="pos-sidebar" aria-label="Sidebar navigation">

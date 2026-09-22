@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Verify Email - Salevince POS')
+@section('title', 'Verify Email - ' . \App\Helpers\CommonHelper::getBrandName())
 
 @section('content')
     <div class="snd-card-icon mb-3"><x-snd-icon name="mail-open" /></div>

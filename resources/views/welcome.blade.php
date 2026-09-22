@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @include('layouts.partials.favicon')
 
-        <title>Salevince POS</title>
+        <title>{{ \App\Helpers\CommonHelper::getBrandName() }}</title>
 
         <!-- Fonts -->
 

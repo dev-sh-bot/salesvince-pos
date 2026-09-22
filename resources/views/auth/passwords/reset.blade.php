@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Reset Password - Salevince POS')
+@section('title', 'Reset Password - ' . \App\Helpers\CommonHelper::getBrandName())
 
 @section('content')
     <h2 class="snd-auth-title">Choose a new password</h2>

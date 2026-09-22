@@ -1,3 +1,8 @@
+@php
+    $brandName = trim(\App\Helpers\CommonHelper::getBrandName());
+    $brandSubtitle = trim(\App\Helpers\CommonHelper::getBrandSubtitle());
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -9,7 +14,7 @@
     <meta name="app-url" content="{{ url('/') }}">
     @include('layouts.partials.favicon')
 
-    <title>@yield('title', 'Salevince POS')</title>
+    <title>@yield('title', $brandName)</title>
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @include('layouts.partials.icon-fonts')
@@ -59,7 +64,7 @@
                     <span class="snd-utility-mark snd-salevince-utility-mark">
                         <img src="{{ asset('images/snd-brand-mark.png') }}" alt="" aria-hidden="true">
                     </span>
-                    <span>Salevince POS <small>by Salevince</small></span>
+                    <span>{{ $brandName }} <small>{{ $brandSubtitle }}</small></span>
                 </span>
             </div>
 

@@ -21,7 +21,7 @@
                         <x-snd-icon name="id-card" />
                         <div>
                             <h3>Basic Information</h3>
-                            <p>Define the role identity and the access it represents in Salevince POS.</p>
+                            <p>Define the role identity and the access it represents in {{ \App\Helpers\CommonHelper::getBrandName() }}.</p>
                         </div>
                     </div>
 

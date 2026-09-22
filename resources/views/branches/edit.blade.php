@@ -22,7 +22,7 @@
                         <x-snd-icon name="git-branch" />
                         <div>
                             <h3>Branch Details</h3>
-                            <p>Update the Salevince POS location and its access controls.</p>
+                            <p>Update the {{ \App\Helpers\CommonHelper::getBrandName() }} location and its access controls.</p>
                         </div>
                         <span class="snd-form-identity-badge">{{ $branch->code }}</span>
                     </div>

@@ -667,7 +667,7 @@
     {{-- 1. Dashboard welcome panel --}}
     <section class="dashboard-hero" aria-labelledby="dashboard-welcome-title">
         <div class="dashboard-hero-copy">
-            <div class="dashboard-eyebrow">Salevince POS · Operations overview</div>
+            <div class="dashboard-eyebrow">{{ \App\Helpers\CommonHelper::getBrandName() }} · Operations overview</div>
             <h2 id="dashboard-welcome-title">Welcome back, {{ auth()->user()->first_name ?? 'Admin' }}!</h2>
             <p>Here's a comprehensive overview of your sales performance, orders, and real-time inventory.</p>
         </div>

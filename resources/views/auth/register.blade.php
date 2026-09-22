@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Register - Salevince POS')
+@section('title', 'Register - ' . \App\Helpers\CommonHelper::getBrandName())
 
 @section('content')
     <h2 class="snd-auth-title">Create your account</h2>

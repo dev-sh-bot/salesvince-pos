@@ -20,7 +20,7 @@
                         <x-snd-icon name="user-plus" />
                         <div>
                             <h3>Account Details</h3>
-                            <p>Set up the operator profile and sign-in details for Salevince POS.</p>
+                            <p>Set up the operator profile and sign-in details for {{ \App\Helpers\CommonHelper::getBrandName() }}.</p>
                         </div>
                     </div>
 

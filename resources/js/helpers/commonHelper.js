@@ -58,12 +58,13 @@ export const CommonHelper = {
      */
     getReceiptFooterHTML(createdAt = "") {
         const dateStr = createdAt || new Date().toLocaleString();
+        const brandName = this.getBrandName();
         return `
             <div class="receipt-footer">
                 <div class="thanks-title">*** THANK YOU FOR VISITING ***</div>
-                <div class="thanks-sub">${window.APP.app_name} — Luxury Salon & Spa</div>
+                <div class="thanks-sub">${brandName} — Luxury Salon & Spa</div>
                 <div class="receipt-notice">Please retain this receipt for any queries.</div>
-                <div class="receipt-software">Powered by Salevince POS | Printed on ${dateStr}</div>
+                <div class="receipt-software">Powered by ${brandName} | Printed on ${dateStr}</div>
             </div>
         `;
     },

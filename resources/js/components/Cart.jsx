@@ -567,8 +567,8 @@ class Cart extends Component {
                         ${sndIconMarkup("lock")}
                     </div>
 
-                    <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">Salevince POS</div>
-                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">POINT OF SALE</div>
+                    <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">${CommonHelper.getBrandName()}</div>
+                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
 
                     <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(42, 105, 176, 0.1);border:1px solid rgba(42, 105, 176, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
                         <span style="width:8px;height:8px;border-radius:50%;background:#2a69b0;box-shadow:0 0 8px #2a69b0;"></span>
@@ -724,8 +724,8 @@ class Cart extends Component {
                         ${sndIconMarkup("lock")}
                     </div>
 
-                    <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">Salevince POS</div>
-                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">POINT OF SALE</div>
+                    <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">${CommonHelper.getBrandName()}</div>
+                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
 
                     <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(42, 105, 176, 0.1);border:1px solid rgba(42, 105, 176, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
                         <span style="width:8px;height:8px;border-radius:50%;background:#2a69b0;box-shadow:0 0 8px #2a69b0;"></span>

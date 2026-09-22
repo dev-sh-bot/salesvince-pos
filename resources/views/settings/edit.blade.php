@@ -13,7 +13,7 @@
                 <x-snd-icon name="sliders" />
                 <div>
                     <h3>POS Configuration</h3>
-                    <p>Configure the catalog, checkout, receipt, and tax settings used by Salevince POS.</p>
+                    <p>Configure the catalog, checkout, receipt, and tax settings used by {{ \App\Helpers\CommonHelper::getBrandName() }}.</p>
                 </div>
             </div>
 

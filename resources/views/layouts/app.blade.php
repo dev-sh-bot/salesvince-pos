@@ -1,3 +1,8 @@
+@php
+    $brandName = trim(\App\Helpers\CommonHelper::getBrandName());
+    $brandSubtitle = trim(\App\Helpers\CommonHelper::getBrandSubtitle());
+@endphp
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -7,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ url('/') }}">
     @include('layouts.partials.favicon')
-    <title>@yield('title', 'Salevince POS')</title>
+    <title>@yield('title', $brandName)</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @include('layouts.partials.icon-fonts')
     @yield('css')
@@ -17,8 +22,8 @@
     <div id="app" class="d-flex flex-column min-vh-100">
         <nav class="snd-topbar" style="position:relative!important;">
             <a href="{{ url('/') }}" class="snd-topbar-label d-flex">
-                <strong>Salevince POS</strong>
-                <span>Operations workspace</span>
+                <strong>{{ $brandName }}</strong>
+                <span>{{ $brandSubtitle }}</span>
             </a>
             <div class="snd-topbar-actions">
                 @guest

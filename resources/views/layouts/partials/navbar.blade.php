@@ -1,5 +1,5 @@
 <nav class="main-header navbar navbar-expand snd-topbar" aria-label="Primary navigation">
-    <button class="snd-menu-button" type="button" data-widget="pushmenu" aria-label="Toggle sidebar" title="Toggle sidebar">
+    <button class="snd-menu-button" type="button" data-sidebar-toggle aria-controls="pos-sidebar" aria-expanded="true" aria-label="Toggle sidebar" title="Toggle sidebar">
         <x-snd-icon name="menu" />
     </button>
 

@@ -42,29 +42,55 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    const closeMobileSidebar = () => document.body.classList.remove("snd-sidebar-open");
+    const sidebarToggle = document.querySelector("[data-sidebar-toggle]");
+    const syncSidebarToggleState = () => {
+        if (!sidebarToggle) return;
 
-    // AdminLTE still owns the legacy selector, so handle it on the button and
-    // stop the delegated plugin listener from toggling the shell a second time.
-    document.querySelectorAll('[data-widget="pushmenu"]').forEach((toggleButton) => {
-        toggleButton.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            if (isMobile()) {
-                document.body.classList.toggle("snd-sidebar-open");
-            } else {
-                document.body.classList.toggle("sidebar-collapse");
-            }
-        });
+        const expanded = isMobile()
+            ? document.body.classList.contains("snd-sidebar-open")
+            : !document.body.classList.contains("sidebar-collapse");
+        sidebarToggle.setAttribute("aria-expanded", String(expanded));
+    };
+    const closeMobileSidebar = () => {
+        document.body.classList.remove("snd-sidebar-open");
+        syncSidebarToggleState();
+    };
+
+    // Keep the responsive shell toggle separate from AdminLTE's PushMenu hook.
+    sidebarToggle?.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (isMobile()) {
+            document.body.classList.toggle("snd-sidebar-open");
+        } else {
+            document.body.classList.toggle("sidebar-collapse");
+        }
+        syncSidebarToggleState();
     });
 
     document.addEventListener("click", (event) => {
-        if (event.target.closest("[data-sidebar-close], [data-sidebar-overlay]")) {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        if (target.closest("[data-sidebar-close], [data-sidebar-overlay]")) {
+            closeMobileSidebar();
+            return;
+        }
+
+        if (isMobile() && target.closest(".snd-nav-list .nav-link[href]:not([href='#'])")) {
             closeMobileSidebar();
         }
     });
 
-    window.addEventListener("resize", () => {
-        if (!isMobile()) closeMobileSidebar();
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && isMobile()) closeMobileSidebar();
     });
+
+    window.addEventListener("resize", () => {
+        if (isMobile()) {
+            syncSidebarToggleState();
+        } else {
+            closeMobileSidebar();
+        }
+    });
+    syncSidebarToggleState();
 });

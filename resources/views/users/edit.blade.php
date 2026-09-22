@@ -21,7 +21,7 @@
                         <x-snd-icon name="square-pen" />
                         <div>
                             <h3>Basic Details</h3>
-                            <p>Update the operator profile and sign-in details for Salevince POS.</p>
+                            <p>Update the operator profile and sign-in details for {{ \App\Helpers\CommonHelper::getBrandName() }}.</p>
                         </div>
                         <span class="snd-form-identity-badge">{{ $user->getFullname() }}</span>
                     </div>
