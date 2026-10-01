@@ -38,7 +38,7 @@
                             <span class="badge badge-info ml-1">System</span>
                         @endif
                     </td>
-                    <td><code style="background:#f0f9fa;color:#0ea5b0;padding:2px 7px;border-radius:5px;font-size:0.78rem;">{{ $role->slug }}</code></td>
+                    <td><code style="background:var(--snd-primary-soft);color:var(--snd-primary-deep);padding:2px 7px;border-radius:5px;font-size:0.78rem;">{{ $role->slug }}</code></td>
                     <td style="color:#6b7280;font-size:0.84rem;">{{ $role->description ?? '—' }}</td>
                     <td>
                         <span class="badge badge-primary">{{ $role->permissions_count ?? $role->permissions->count() }}</span>

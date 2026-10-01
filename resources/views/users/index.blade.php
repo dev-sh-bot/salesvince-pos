@@ -33,13 +33,13 @@
                     <td>{{ $user->id }}</td>
                     <td>
                         <div style="display:flex;align-items:center;gap:9px;">
-                            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0ea5b0,#0d3b45);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;flex-shrink:0;">
+                            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--snd-primary),var(--snd-primary-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;flex-shrink:0;">
                                 {{ strtoupper(substr($user->first_name, 0, 1)) }}
                             </div>
                             <div>
                                 <div style="font-weight:600;color:#0d3b45;font-size:0.85rem;">{{ $user->getFullname() }}</div>
                                 @if($user->id === auth()->id())
-                                    <span style="font-size:0.7rem;color:#0ea5b0;font-weight:600;">You</span>
+                                    <span style="font-size:0.7rem;color:var(--snd-primary-deep);font-weight:600;">You</span>
                                 @endif
                             </div>
                         </div>

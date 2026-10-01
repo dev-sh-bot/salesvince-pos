@@ -12,8 +12,8 @@
         border-radius: 20px;
         padding: 22px 26px;
         margin-bottom: 24px;
-        border: 1.5px solid #d0e4f5;
-        box-shadow: 0 10px 30px rgba(42, 105, 176, 0.08);
+        border: 1.5px solid var(--snd-border-strong);
+        box-shadow: 0 10px 30px rgba(151, 134, 238, 0.08);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -32,7 +32,7 @@
     .welcome-title p {
         margin: 0;
         font-size: 0.88rem;
-        color: #2a69b0;
+        color: var(--snd-primary-deep);
     }
 
     .quick-actions {
@@ -54,24 +54,24 @@
     }
 
     .btn-pos-quick {
-        background: #2a69b0;
-        color: #ffffff !important;
-        box-shadow: 0 6px 18px rgba(42, 105, 176, 0.38);
+        background: var(--snd-primary);
+        color: var(--snd-button-primary-text) !important;
+        box-shadow: 0 6px 18px rgba(151, 134, 238, 0.38);
     }
     .btn-pos-quick:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(42, 105, 176, 0.5);
+        box-shadow: 0 8px 24px rgba(151, 134, 238, 0.5);
     }
 
     .btn-secondary-quick {
-        background: #f0f6ff;
-        color: #2a69b0 !important;
-        border: 1.5px solid #d0e4f5;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep) !important;
+        border: 1.5px solid var(--snd-border-strong);
     }
     .btn-secondary-quick:hover {
-        background: #e8f2fb;
-        border-color: #2a69b0;
-        color: #2a69b0 !important;
+        background: var(--snd-primary-soft);
+        border-color: var(--snd-primary);
+        color: var(--snd-primary-deep) !important;
         transform: translateY(-2px);
     }
 
@@ -92,30 +92,30 @@
 
     .metric-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 14px 34px rgba(42, 105, 176, 0.2);
+        box-shadow: 0 14px 34px rgba(151, 134, 238, 0.2);
     }
 
     .metric-card.card-today {
         background: #ffffff;
-        border: 1.5px solid rgba(42, 105, 176, 0.3);
+        border: 1.5px solid rgba(151, 134, 238, 0.3);
         color: #1a1a1a;
     }
 
     .metric-card.card-week {
         background: #ffffff;
-        border: 1.5px solid rgba(42, 105, 176, 0.3);
+        border: 1.5px solid rgba(151, 134, 238, 0.3);
         color: #1a1a1a;
     }
 
     .metric-card.card-month {
         background: #ffffff;
-        border: 1.5px solid rgba(42, 105, 176, 0.3);
+        border: 1.5px solid rgba(151, 134, 238, 0.3);
         color: #1a1a1a;
     }
 
     .metric-card.card-customers {
         background: #ffffff;
-        border: 1.5px solid rgba(42, 105, 176, 0.3);
+        border: 1.5px solid rgba(151, 134, 238, 0.3);
         color: #1a1a1a;
     }
 
@@ -128,14 +128,14 @@
 
     .metric-card.card-week .icon-bubble, .metric-card.card-today .icon-bubble,.metric-card.card-customers .icon-bubble,
     .metric-card.card-month .icon-bubble {
-        background: #e8f2fb;
-        color: #2a69b0;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
     }
 
     .metric-card.card-week .metric-pill, .metric-card.card-today .metric-pill, .metric-card.card-customers .metric-pill,
     .metric-card.card-month .metric-pill {
-        background: #e8f2fb;
-        color: #2a69b0;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
     }
 
     .metric-header {
@@ -185,8 +185,8 @@
     .widget-card {
         background: #ffffff;
         border-radius: 20px;
-        border: 1.5px solid #d0e4f5;
-        box-shadow: 0 10px 30px rgba(42, 105, 176, 0.06);
+        border: 1.5px solid var(--snd-border-strong);
+        box-shadow: 0 10px 30px rgba(151, 134, 238, 0.06);
         margin-bottom: 24px;
         overflow: hidden;
     }
@@ -213,9 +213,9 @@
     .widget-header .badge-tag {
         font-size: 0.72rem;
         font-weight: 500;
-        background: #f0f6ff;
-        color: #2a69b0;
-        border: 1px solid #d0e4f5;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
+        border: 1px solid var(--snd-border-strong);
         padding: 4px 10px;
         border-radius: 8px;
     }
@@ -238,14 +238,14 @@
     }
 
     .table-modern thead th {
-        background: #f0f6ff;
-        color: #2a69b0;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
         font-size: 0.74rem;
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.06em;
         border-top: none;
-        border-bottom: 1px solid #d0e4f5;
+        border-bottom: 1px solid var(--snd-border-strong);
         padding: 12px 18px;
     }
 
@@ -262,16 +262,16 @@
     }
 
     .table-modern tbody tr:hover {
-        background-color: #f0f6ff;
+        background-color: var(--snd-primary-soft);
     }
 
     .avatar-badge {
         width: 34px;
         height: 34px;
         border-radius: 10px;
-        background: #f0f6ff;
-        border: 1px solid #d0e4f5;
-        color: #2a69b0;
+        background: var(--snd-primary-soft);
+        border: 1px solid var(--snd-border-strong);
+        color: var(--snd-primary-deep);
         font-weight: 600;
         font-size: 0.82rem;
         display: inline-flex;
@@ -296,23 +296,23 @@
     }
 
     .status-pill.srb {
-        background: #f0f6ff;
-        color: #2a69b0;
-        border: 1px solid #d0e4f5;
+        background: var(--snd-primary-soft);
+        color: var(--snd-primary-deep);
+        border: 1px solid var(--snd-border-strong);
         font-size: 0.7rem;
     }
 
     .progress-bar-custom {
         height: 6px;
         border-radius: 4px;
-        background: #d0e4f5;
+        background: var(--snd-border-strong);
         overflow: hidden;
         margin-top: 6px;
     }
 
     .progress-fill-orange {
         height: 100%;
-        background: #2a69b0;
+        background: var(--snd-primary);
         border-radius: 4px;
     }
 
@@ -328,7 +328,7 @@
     }
     .summary-item .label {
         font-size: 0.86rem;
-        color: #2a69b0;
+        color: var(--snd-primary-deep);
         display: flex;
         align-items: center;
         gap: 8px;
@@ -460,13 +460,13 @@
     .dashboard-quick-action-primary {
         border-color: transparent;
         background: var(--snd-primary);
-        color: #fff !important;
+        color: var(--snd-button-primary-text) !important;
         box-shadow: 0 8px 18px rgba(151, 134, 238, .2);
     }
     .dashboard-quick-action-primary:hover {
         border-color: transparent;
         background: var(--snd-primary-hover);
-        color: #fff !important;
+        color: var(--snd-button-primary-text) !important;
     }
     .dashboard-quick-action-icon {
         display: inline-flex;
@@ -481,7 +481,7 @@
     }
     .dashboard-quick-action-primary .dashboard-quick-action-icon {
         background: rgba(255, 255, 255, .2);
-        color: #fff;
+        color: var(--snd-button-primary-text);
     }
     .dashboard-quick-action-copy {
         display: flex;
@@ -505,9 +505,9 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .dashboard-quick-action-primary .dashboard-quick-action-copy small { color: rgba(255, 255, 255, .78); }
+    .dashboard-quick-action-primary .dashboard-quick-action-copy small { color: var(--snd-button-primary-text); }
     .dashboard-quick-arrow { flex: 0 0 auto; color: var(--snd-muted); }
-    .dashboard-quick-action-primary .dashboard-quick-arrow { color: rgba(255, 255, 255, .82); }
+    .dashboard-quick-action-primary .dashboard-quick-arrow { color: var(--snd-button-primary-text); }
 
     .dashboard-overview-grid {
         display: grid;
@@ -796,8 +796,8 @@
         <div class="col-lg-7">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="shopping-bag" style="color: #2a69b0;" /> Latest Transactions</h4>
-                    <a href="{{ route('orders.index') }}" class="btn btn-xs" style="background: #f0f6ff; border: 1px solid #d0e4f5; color: #2a69b0; border-radius: 8px; font-weight: 500;">View All Orders</a>
+                    <h4><x-snd-icon name="shopping-bag" style="color: var(--snd-primary-deep);" /> Latest Transactions</h4>
+                    <a href="{{ route('orders.index') }}" class="btn btn-xs" style="background: var(--snd-primary-soft); border: 1px solid var(--snd-border-strong); color: var(--snd-primary-deep); border-radius: 8px; font-weight: 500;">View All Orders</a>
                 </div>
                 <div class="table-responsive snd-table-scroll">
                     <table class="table table-modern">
@@ -829,22 +829,22 @@
                                                 <div style="font-weight: 600; color: #1a1a1a;">
                                                     {{ $ord->customer ? $ord->customer->first_name . ' ' . $ord->customer->last_name : 'Walk-in Customer' }}
                                                 </div>
-                                                <small style="color: #2a69b0;">{{ $ord->customer->phone ?? '' }}</small>
+                                                <small style="color: var(--snd-primary-deep);">{{ $ord->customer->phone ?? '' }}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge badge-light" style="font-size: 0.8rem; font-weight: 600; background: #f0f6ff; border: 1px solid #d0e4f5; color: #2a69b0;">{{ $ord->items->sum('quantity') }} items</span>
+                                        <span class="badge badge-light" style="font-size: 0.8rem; font-weight: 600; background: var(--snd-primary-soft); border: 1px solid var(--snd-border-strong); color: var(--snd-primary-deep);">{{ $ord->items->sum('quantity') }} items</span>
                                     </td>
                                     <td>
-                                        <strong style="color: #2a69b0; font-size: 0.92rem; font-weight: 600;">
+                                        <strong style="color: var(--snd-primary-deep); font-size: 0.92rem; font-weight: 600;">
                                             {{ config('settings.currency_symbol') }} {{ number_format($ord->total_amount, 2) }}
                                         </strong>
                                     </td>
                                     <td>
                                         <span class="status-pill paid"><x-snd-icon name="circle-check" class="mr-1" /> Paid</span>
                                     </td>
-                                    <td style="color: #2a69b0; font-size: 0.8rem;">
+                                    <td style="color: var(--snd-primary-deep); font-size: 0.8rem;">
                                         {{ $ord->created_at ? $ord->created_at->format('d M, h:i A') : '' }}
                                     </td>
                                 </tr>
@@ -863,7 +863,7 @@
         <div class="col-lg-5">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="flame" style="color: #2a69b0;" /> Top Selling Items</h4>
+                    <h4><x-snd-icon name="flame" style="color: var(--snd-primary-deep);" /> Top Selling Items</h4>
                     <span class="badge-tag">High Demand</span>
                 </div>
                 <div class="p-3">
@@ -871,7 +871,7 @@
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span style="font-weight: 600; font-size: 0.88rem; color: #1a1a1a;">{{ $item['name'] }}</span>
-                                <span style="font-weight: 500; font-size: 0.86rem; color: #2a69b0;">{{ $item['quantity'] }} sold</span>
+                                <span style="font-weight: 500; font-size: 0.86rem; color: var(--snd-primary-deep);">{{ $item['quantity'] }} sold</span>
                             </div>
                             <div class="progress-bar-custom">
                                 <div class="progress-fill-orange" style="width: {{ min(100, max(20, $item['quantity'] * 2)) }}%;"></div>
@@ -883,7 +883,7 @@
                 </div>
 
                 @if($low_stock_products->isNotEmpty())
-                    <div class="p-3 border-top" style="background: #f0f6ff;">
+                    <div class="p-3 border-top" style="background: var(--snd-primary-soft);">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                         <span style="font-size: 0.82rem; font-weight: 600; color: #dc2626;"><x-snd-icon name="triangle-alert" class="mr-1" /> Low Stock Alert</span>
                             <a href="{{ route('products.index') }}" class="small" style="color: #dc2626; font-weight: 600;">Manage Inventory</a>
@@ -907,7 +907,7 @@
         <div class="col-lg-8">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="table" style="color: #2a69b0;" /> Monthly Financial Breakdown</h4>
+                    <h4><x-snd-icon name="table" style="color: var(--snd-primary-deep);" /> Monthly Financial Breakdown</h4>
                     <span class="badge-tag">Audited Log</span>
                 </div>
                 <div class="table-responsive snd-table-scroll">
@@ -925,9 +925,9 @@
                             @foreach($monthly_sales as $month)
                                 <tr>
                                     <td><strong>{{ $month['label'] }}</strong></td>
-                                    <td><span class="badge badge-light" style="font-size: 0.82rem; font-weight: 600; background: #f0f6ff; border: 1px solid #d0e4f5; color: #2a69b0;">{{ $month['orders'] }} orders</span></td>
+                                    <td><span class="badge badge-light" style="font-size: 0.82rem; font-weight: 600; background: var(--snd-primary-soft); border: 1px solid var(--snd-border-strong); color: var(--snd-primary-deep);">{{ $month['orders'] }} orders</span></td>
                                     <td><strong style="color: #1a1a1a;">{{ config('settings.currency_symbol') }} {{ number_format($month['sales'], 2) }}</strong></td>
-                                    <td style="color: #2a69b0;">{{ config('settings.currency_symbol') }} {{ number_format($month['orders'] ? $month['sales'] / $month['orders'] : 0, 2) }}</td>
+                                    <td style="color: var(--snd-primary-deep);">{{ config('settings.currency_symbol') }} {{ number_format($month['orders'] ? $month['sales'] / $month['orders'] : 0, 2) }}</td>
                                     <td>
                                         <span class="status-pill paid"><x-snd-icon name="check-check" class="mr-1" /> Closed</span>
                                     </td>
@@ -943,29 +943,29 @@
         <div class="col-lg-4">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h4><x-snd-icon name="calculator" style="color: #2a69b0;" /> Current Month POS Audit</h4>
+                    <h4><x-snd-icon name="calculator" style="color: var(--snd-primary-deep);" /> Current Month POS Audit</h4>
                     <span class="badge-tag">{{ now()->format('M Y') }}</span>
                 </div>
                 <div class="p-3">
                     <div class="summary-item">
-                        <span class="label"><x-snd-icon name="box" style="color: #2a69b0;" /> Items Dispatched</span>
+                        <span class="label"><x-snd-icon name="box" style="color: var(--snd-primary-deep);" /> Items Dispatched</span>
                         <span class="value">{{ number_format($pos_summary['items_sold']) }} units</span>
                     </div>
                     <div class="summary-item">
-                        <span class="label"><x-snd-icon name="receipt" style="color: #2a69b0;" /> Average Basket Size</span>
+                        <span class="label"><x-snd-icon name="receipt" style="color: var(--snd-primary-deep);" /> Average Basket Size</span>
                         <span class="value">{{ config('settings.currency_symbol') }} {{ number_format($pos_summary['average_order'], 2) }}</span>
                     </div>
                     <div class="summary-item">
-                        <span class="label"><x-snd-icon name="percent" style="color: #2a69b0;" /> Tax Collected (SRB)</span>
+                        <span class="label"><x-snd-icon name="percent" style="color: var(--snd-primary-deep);" /> Tax Collected (SRB)</span>
                         <span class="value" style="color: #059669;">{{ config('settings.currency_symbol') }} {{ number_format($pos_summary['tax'], 2) }}</span>
                     </div>
                     <div class="summary-item">
-                        <span class="label"><x-snd-icon name="tag" style="color: #2a69b0;" /> Discounts Claimed</span>
-                        <span class="value" style="color: #2a69b0;">{{ config('settings.currency_symbol') }} {{ number_format($pos_summary['discount'], 2) }}</span>
+                        <span class="label"><x-snd-icon name="tag" style="color: var(--snd-primary-deep);" /> Discounts Claimed</span>
+                        <span class="value" style="color: var(--snd-primary-deep);">{{ config('settings.currency_symbol') }} {{ number_format($pos_summary['discount'], 2) }}</span>
                     </div>
-                    <div class="summary-item" style="background: #f0f6ff; border: 1px solid #d0e4f5; padding: 12px 14px; border-radius: 12px; margin-top: 10px;">
-                        <span class="label" style="font-weight: 600; color: #1a1a1a;"><x-snd-icon name="wallet" style="color: #2a69b0;" /> Total Net Inflow</span>
-                        <span class="value" style="color: #2a69b0; font-size: 1.1rem; font-weight: 600;">{{ config('settings.currency_symbol') }} {{ number_format($sales_month, 2) }}</span>
+                    <div class="summary-item" style="background: var(--snd-primary-soft); border: 1px solid var(--snd-border-strong); padding: 12px 14px; border-radius: 12px; margin-top: 10px;">
+                        <span class="label" style="font-weight: 600; color: #1a1a1a;"><x-snd-icon name="wallet" style="color: var(--snd-primary-deep);" /> Total Net Inflow</span>
+                        <span class="value" style="color: var(--snd-primary-deep); font-size: 1.1rem; font-weight: 600;">{{ config('settings.currency_symbol') }} {{ number_format($sales_month, 2) }}</span>
                     </div>
                 </div>
             </div>

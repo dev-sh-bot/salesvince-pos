@@ -63,7 +63,7 @@
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                             <input type="checkbox" name="is_active" value="1"
                                    {{ old('is_active', true) ? 'checked' : '' }}
-                                   style="accent-color:#0ea5b0;width:16px;height:16px;">
+                                   style="accent-color:var(--snd-primary);width:16px;height:16px;">
                             <span style="font-weight:500;">Counter is Active</span>
                         </label>
                     </div>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <label class="snd-form-toggle">
-                            <input type="checkbox" id="show_pass" style="accent-color:#0ea5b0;">
+                            <input type="checkbox" id="show_pass" style="accent-color:var(--snd-primary);">
                             Show passwords
                         </label>
                     </div>

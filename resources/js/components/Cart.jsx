@@ -36,35 +36,35 @@ const S = {
     },
     gateCard: {
         background: "#fff", borderRadius: "24px",
-        boxShadow: "0 16px 45px rgba(42, 105, 176, 0.12)",
+        boxShadow: "0 16px 45px rgba(151, 134, 238, 0.12)",
         padding: "42px 46px", textAlign: "center", maxWidth: "440px", width: "100%",
-        border: "1.5px solid #d0e4f5",
+        border: "1.5px solid var(--snd-border-strong)",
     },
     gateIcon: {
         width: "72px", height: "72px", borderRadius: "20px",
-        background: "#2a69b0",
+        background: "var(--snd-primary)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        margin: "0 auto 20px", fontSize: "1.9rem", color: "#fff",
-        boxShadow: "0 8px 24px rgba(42, 105, 176, 0.38)",
+        margin: "0 auto 20px", fontSize: "1.9rem", color: "var(--snd-button-primary-text)",
+        boxShadow: "0 8px 24px rgba(151, 134, 238, 0.25)",
     },
     gateTitle: { fontSize: "1.35rem", fontWeight: 600, color: "#1a1a1a", marginBottom: "6px", letterSpacing: "-0.02em" },
-    gateSubtitle: { fontSize: "0.85rem", color: "#1a3a5c", marginBottom: "26px", lineHeight: 1.5 },
+    gateSubtitle: { fontSize: "0.85rem", color: "var(--snd-ink-soft)", marginBottom: "26px", lineHeight: 1.5 },
     gateBranchBadge: {
         display: "inline-flex", alignItems: "center", gap: "6px",
-        background: "#f0f6ff", border: "1px solid #d0e4f5", borderRadius: "22px",
-        padding: "6px 16px", fontSize: "0.82rem", fontWeight: 500, color: "#2a69b0",
+        background: "var(--snd-primary-soft)", border: "1px solid var(--snd-border-strong)", borderRadius: "22px",
+        padding: "6px 16px", fontSize: "0.82rem", fontWeight: 500, color: "var(--snd-primary-deep)",
         marginBottom: "22px",
     },
     gateBtn: {
         width: "100%", padding: "14px 0", borderRadius: "14px",
         border: "none", fontSize: "0.95rem", fontWeight: 600, cursor: "pointer",
-        background: "#2a69b0", color: "#fff",
-        boxShadow: "0 6px 20px rgba(42, 105, 176, 0.4)", transition: "all 0.15s",
+        background: "var(--snd-primary)", color: "var(--snd-button-primary-text)",
+        boxShadow: "0 6px 20px rgba(151, 134, 238, 0.4)", transition: "all 0.15s",
     },
     gateBtnSecondary: {
         width: "100%", padding: "10px 0", borderRadius: "12px",
-        border: "1.5px solid #d0e4f5", fontSize: "0.85rem", fontWeight: 500,
-        cursor: "pointer", background: "#f0f6ff", color: "#2a69b0",
+        border: "1.5px solid var(--snd-border-strong)", fontSize: "0.85rem", fontWeight: 500,
+        cursor: "pointer", background: "var(--snd-primary-soft)", color: "var(--snd-primary-deep)",
         marginTop: "10px", transition: "all 0.15s",
     },
     stepIndicator: {
@@ -75,13 +75,13 @@ const S = {
         width: "32px", height: "32px", borderRadius: "50%",
         display: "flex", alignItems: "center", justifyContent: "center",
         fontSize: "0.78rem", fontWeight: 600,
-        background: done ? "#2a69b0" : active ? "#2a69b0" : "#f0f6ff",
-        color: done || active ? "#fff" : "#2a69b0",
-        border: done || active ? "none" : "1.5px solid #d0e4f5",
-        boxShadow: active ? "0 0 0 4px rgba(42, 105, 176, 0.25)" : "none",
+        background: done ? "var(--snd-primary)" : active ? "var(--snd-primary)" : "var(--snd-primary-soft)",
+        color: done || active ? "var(--snd-button-primary-text)" : "var(--snd-primary-deep)",
+        border: done || active ? "none" : "1.5px solid var(--snd-border-strong)",
+        boxShadow: active ? "0 0 0 4px rgba(151, 134, 238, 0.25)" : "none",
     }),
     stepLine: {
-        flex: 1, height: "2px", background: "linear-gradient(90deg, #2a69b0, #d0e4f5)", maxWidth: "40px",
+        flex: 1, height: "2px", background: "linear-gradient(90deg, var(--snd-primary), var(--snd-border-strong))", maxWidth: "40px",
     },
     // ''‚''‚¬ Cart panel ''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚¬
     cartPanel: {
@@ -91,12 +91,12 @@ const S = {
         borderRight: "1px solid #e2e8f0",
     },
     cartHeader: {
-        padding: "16px 18px", background: "#0f172a", color: "#fff",
+        padding: "16px 18px", background: "#0f172a", color: "var(--snd-button-primary-text)",
         fontWeight: 500, fontSize: "0.92rem",
         display: "flex", alignItems: "center", justifyContent: "space-between",
     },
     cartHeaderBadge: {
-        background: "#2563eb", color: "#fff", borderRadius: "12px",
+        background: "var(--snd-primary)", color: "var(--snd-button-primary-text)", borderRadius: "12px",
         fontSize: "0.72rem", padding: "3px 10px", fontWeight: 600,
     },
     cartHeaderMeta: {
@@ -130,7 +130,7 @@ const S = {
         lineHeight: 1.3, minWidth: 0, overflow: "hidden",
         textOverflow: "ellipsis", whiteSpace: "nowrap",
     },
-    cartItemPrice: { fontSize: "0.76rem", color: "#2563eb", fontWeight: 600, marginTop: "1px" },
+    cartItemPrice: { fontSize: "0.76rem", color: "var(--snd-primary-deep)", fontWeight: 600, marginTop: "1px" },
     qtyControl: { display: "flex", alignItems: "center", gap: "3px", flexShrink: 0 },
     qtyBtn: {
         width: "24px", height: "24px", borderRadius: "6px",
@@ -171,10 +171,10 @@ const S = {
         borderRadius: "10px", fontSize: "0.83rem", fontWeight: 600, cursor: "pointer",
     },
     btnCheckout: {
-        flex: 2, padding: "10px 0", border: "none", color: "#fff",
-        background: "linear-gradient(135deg,#2563eb,#1d4ed8)",
+        flex: 2, padding: "10px 0", border: "none", color: "var(--snd-button-primary-text)",
+        background: "var(--snd-primary)",
         borderRadius: "10px", fontSize: "0.85rem", fontWeight: 500,
-        cursor: "pointer", boxShadow: "0 4px 14px rgba(37,99,235,0.35)",
+        cursor: "pointer", boxShadow: "0 4px 14px rgba(151,134,238,0.35)",
         letterSpacing: "0.02em",
     },
     // ''‚''‚¬ Products panel ''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚¬
@@ -231,7 +231,7 @@ const S = {
         background: low ? "#fef2f2" : "#ecfdf5",
         color: low ? "#dc2626" : "#059669",
     }),
-    productTilePrice: { fontSize: "0.85rem", fontWeight: 600, color: "#2563eb" },
+    productTilePrice: { fontSize: "0.85rem", fontWeight: 600, color: "var(--snd-primary-deep)" },
 };
 
 // ''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚¬
@@ -396,8 +396,8 @@ class Cart extends Component {
                 border-radius: 28px !important;
                 background: #ffffff !important;
                 position: relative !important;
-                border: 1.5px solid #d0e4f5 !important;
-                box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.07), 0 4px 15px rgba(42, 105, 176, 0.12) !important;
+                border: 1.5px solid var(--snd-border-strong) !important;
+                box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.07), 0 4px 15px rgba(151, 134, 238, 0.12) !important;
                 padding: 2.4rem 2.2rem 2rem !important;
                 overflow: visible !important;
             }
@@ -420,25 +420,25 @@ class Cart extends Component {
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
             }
             .swal2-popup.swal2-pos-gate .swal2-confirm {
-                background: #2a69b0 !important;
+                background: var(--snd-primary) !important;
                 border: none !important;
                 color: #ffffff !important;
-                box-shadow: 0 6px 18px rgba(42, 105, 176, 0.28) !important;
+                box-shadow: 0 6px 18px rgba(151, 134, 238, 0.28) !important;
                 letter-spacing: 0.02em !important;
                 width: 100% !important;
             }
             .swal2-popup.swal2-pos-gate .swal2-confirm:hover {
-                box-shadow: 0 10px 24px rgba(42, 105, 176, 0.4) !important;
+                box-shadow: 0 10px 24px rgba(151, 134, 238, 0.4) !important;
                 transform: translateY(-2px) !important;
             }
             .swal2-popup.swal2-pos-gate .swal2-cancel {
-                background: #f0f6ff !important;
-                border: 1.5px solid #d0e4f5 !important;
-                color: #8c733e !important;
+                background: var(--snd-primary-soft) !important;
+                border: 1.5px solid var(--snd-border-strong) !important;
+                color: var(--snd-primary-deep) !important;
             }
             .swal2-popup.swal2-pos-gate .swal2-cancel:hover {
-                background: #f5eedf !important;
-                color: #1a3a5c !important;
+                background: var(--snd-primary-soft) !important;
+                color: var(--snd-primary-deep) !important;
                 transform: translateY(-1px) !important;
             }
             .swal2-popup.swal2-pos-gate select,
@@ -447,9 +447,9 @@ class Cart extends Component {
             }
             .swal2-popup.swal2-pos-gate select:focus,
             .swal2-popup.swal2-pos-gate input:focus {
-                border-color: #2a69b0 !important;
+                border-color: var(--snd-primary) !important;
                 background: #ffffff !important;
-                box-shadow: 0 0 0 4px rgba(42, 105, 176, 0.14) !important;
+                box-shadow: 0 0 0 4px rgba(151, 134, 238, 0.14) !important;
             }
 
             /* Select2 Custom POS Gateway Styling */
@@ -460,8 +460,8 @@ class Cart extends Component {
             .swal2-popup.swal2-pos-gate .select2-container--default .select2-selection--single {
                 height: 48px !important;
                 border-radius: 16px !important;
-                border: 1.5px solid #d0e4f5 !important;
-                background: #f0f6ff !important;
+                border: 1.5px solid var(--snd-border-strong) !important;
+                background: var(--snd-primary-soft) !important;
                 display: flex !important;
                 align-items: center !important;
                 padding-left: 2.6rem !important;
@@ -471,9 +471,9 @@ class Cart extends Component {
             }
             .swal2-popup.swal2-pos-gate .select2-container--default.select2-container--open .select2-selection--single,
             .swal2-popup.swal2-pos-gate .select2-container--default.select2-container--focus .select2-selection--single {
-                border-color: #2a69b0 !important;
+                border-color: var(--snd-primary) !important;
                 background: #ffffff !important;
-                box-shadow: 0 0 0 4px rgba(42, 105, 176, 0.14) !important;
+                box-shadow: 0 0 0 4px rgba(151, 134, 238, 0.14) !important;
                 outline: none !important;
             }
             .swal2-popup.swal2-pos-gate .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -488,16 +488,16 @@ class Cart extends Component {
                 right: 0.9rem !important;
             }
             .swal2-popup.swal2-pos-gate .select2-container--default .select2-selection--single .select2-selection__arrow b {
-                border-color: #2a69b0 transparent transparent transparent !important;
+                border-color: var(--snd-primary) transparent transparent transparent !important;
                 border-width: 6px 5px 0 5px !important;
             }
             .swal2-popup.swal2-pos-gate .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-                border-color: transparent transparent #2a69b0 transparent !important;
+                border-color: transparent transparent var(--snd-primary) transparent !important;
                 border-width: 0 5px 6px 5px !important;
             }
             .select2-dropdown {
                 border-radius: 16px !important;
-                border: 1.5px solid #d0e4f5 !important;
+                border: 1.5px solid var(--snd-border-strong) !important;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
                 background: #ffffff !important;
                 overflow: hidden !important;
@@ -515,12 +515,12 @@ class Cart extends Component {
             }
             .select2-container--default .select2-results__option--highlighted[aria-selected],
             .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-                background: #2a69b0 !important;
+                background: var(--snd-primary) !important;
                 color: #ffffff !important;
             }
             .select2-container--default .select2-results__option[aria-selected="true"] {
-                background: #f0f6ff !important;
-                color: #2a69b0 !important;
+                background: var(--snd-primary-soft) !important;
+                color: var(--snd-primary-deep) !important;
                 font-weight: 500 !important;
             }
         `;
@@ -529,13 +529,13 @@ class Cart extends Component {
             .replaceAll("#2a69b0", "#9786ee")
             .replaceAll("#2563eb", "#9786ee")
             .replaceAll("#1d4ed8", "#806fda")
-            .replaceAll("#d0e4f5", "#e1def4")
-            .replaceAll("#f0f6ff", "#f0edff")
+            .replaceAll("var(--snd-border-strong)", "#e1def4")
+            .replaceAll("var(--snd-primary-soft)", "var(--snd-primary-soft)")
             .replaceAll("#f5eedf", "#e9e5ff")
             .replaceAll("#8c733e", "#6758bd")
             .replaceAll("#1a3a5c", "#505469")
-            .replaceAll("rgba(42, 105, 176", "rgba(151, 134, 238")
-            .replaceAll("rgba(42,105,176", "rgba(151,134,238");
+            .replaceAll("rgba(151, 134, 238", "rgba(151, 134, 238")
+            .replaceAll("rgba(151,134,238", "rgba(151,134,238");
         document.head.appendChild(style);
     }
 
@@ -561,7 +561,7 @@ class Cart extends Component {
                 icon: "warning",
                 title: "No Branches Assigned",
                 text: "You have no branches assigned. Contact your administrator.",
-                confirmButtonColor: "#2a69b0",
+                confirmButtonColor: "#9786ee",
             });
             return;
         }
@@ -574,16 +574,16 @@ class Cart extends Component {
             title: "",
             html: `
                 <div style="text-align:center;padding:0.2rem 0;">
-                    <div style="width:68px;height:68px;border-radius:22px;background:#2a69b0;display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.65rem;box-shadow:0 8px 24px rgba(42, 105, 176, 0.25);margin-bottom:1.2rem;">
+                    <div style="width:68px;height:68px;border-radius:22px;background:var(--snd-primary);display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.65rem;box-shadow:0 8px 24px rgba(151, 134, 238, 0.25);margin-bottom:1.2rem;">
                         ${sndIconMarkup("lock")}
                     </div>
 
                     <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">${CommonHelper.getBrandName()}</div>
-                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
+                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:var(--snd-primary-deep);text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
 
-                    <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(42, 105, 176, 0.1);border:1px solid rgba(42, 105, 176, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
-                        <span style="width:8px;height:8px;border-radius:50%;background:#2a69b0;box-shadow:0 0 8px #2a69b0;"></span>
-                        <span style="font-size:0.76rem;letter-spacing:0.12em;color:#2a69b0;text-transform:uppercase;font-weight:600;">Branch Access</span>
+                    <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(151, 134, 238, 0.1);border:1px solid rgba(151, 134, 238, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
+                        <span style="width:8px;height:8px;border-radius:50%;background:var(--snd-primary);box-shadow:0 0 8px var(--snd-primary);"></span>
+                        <span style="font-size:0.76rem;letter-spacing:0.12em;color:var(--snd-primary-deep);text-transform:uppercase;font-weight:600;">Branch Access</span>
                     </div>
 
                     <div style="display:flex;flex-direction:column;gap:1.2rem;text-align:left;max-width:370px;margin:0 auto;">
@@ -592,11 +592,11 @@ class Cart extends Component {
                                 Select Branch
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("building-2", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.95rem;pointer-events:none;z-index:10;" })}
-                                <select id="swal-branch" style="width:100%;padding:0.85rem 2.5rem 0.85rem 2.8rem;border:1.5px solid #d0e4f5;border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;appearance:none;-webkit-appearance:none;cursor:pointer;box-sizing:border-box;transition:all 0.2s ease;">
+                                ${sndIconMarkup("building-2", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.95rem;pointer-events:none;z-index:10;" })}
+                                <select id="swal-branch" style="width:100%;padding:0.85rem 2.5rem 0.85rem 2.8rem;border:1.5px solid var(--snd-border-strong);border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;appearance:none;-webkit-appearance:none;cursor:pointer;box-sizing:border-box;transition:all 0.2s ease;">
                                     ${branchOptions}
                                 </select>
-                                ${sndIconMarkup("chevron-down", { id: "swal-branch-arrow", style: "position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;pointer-events:none;font-size:0.85rem;z-index:3;" })}
+                                ${sndIconMarkup("chevron-down", { id: "swal-branch-arrow", style: "position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);pointer-events:none;font-size:0.85rem;z-index:3;" })}
                             </div>
                         </div>
 
@@ -605,12 +605,12 @@ class Cart extends Component {
                                 Branch Password
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("key", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.95rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("key", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.95rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-branch-pass" type="password"
                                        placeholder="Enter branch password"
-                                       style="width:100%;padding:0.85rem 2.8rem 0.85rem 2.8rem;border:1.5px solid #d0e4f5;border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;"
+                                       style="width:100%;padding:0.85rem 2.8rem 0.85rem 2.8rem;border:1.5px solid var(--snd-border-strong);border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;"
                                        autocomplete="off">
-                                <button type="button" id="swal-pass-toggle" style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#2a69b0;cursor:pointer;font-size:0.95rem;padding:4px;display:flex;align-items:center;justify-content:center;z-index:2;">
+                                <button type="button" id="swal-pass-toggle" style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--snd-primary-deep);cursor:pointer;font-size:0.95rem;padding:4px;display:flex;align-items:center;justify-content:center;z-index:2;">
                                     ${sndIconMarkup("eye", { id: "swal-pass-toggle-icon" })}
                                 </button>
                             </div>
@@ -619,7 +619,7 @@ class Cart extends Component {
                 </div>`,
             showCancelButton: false,
             confirmButtonText: "Verify Branch",
-            confirmButtonColor: "#2a69b0",
+            confirmButtonColor: "#9786ee",
             allowOutsideClick: false,
             allowEscapeKey: false,
             focusConfirm: false,
@@ -635,12 +635,12 @@ class Cart extends Component {
                             passInput.type = "text";
                             icon.outerHTML = sndIconMarkup("eye-off", { id: "swal-pass-toggle-icon" });
                             icon = document.getElementById("swal-pass-toggle-icon");
-                            toggleBtn.style.color = "#2a69b0";
+                            toggleBtn.style.color = getComputedStyle(document.documentElement).getPropertyValue("--snd-primary-deep").trim() || "#6758bd";
                         } else {
                             passInput.type = "password";
                             icon.outerHTML = sndIconMarkup("eye", { id: "swal-pass-toggle-icon" });
                             icon = document.getElementById("swal-pass-toggle-icon");
-                            toggleBtn.style.color = "#2a69b0";
+                            toggleBtn.style.color = getComputedStyle(document.documentElement).getPropertyValue("--snd-primary-deep").trim() || "#6758bd";
                         }
                     });
                 }
@@ -718,7 +718,7 @@ class Cart extends Component {
                 icon: "warning",
                 title: "No Counters Assigned",
                 text: "You have no counters assigned to this branch. Contact your administrator.",
-                confirmButtonColor: "#2a69b0",
+                confirmButtonColor: "#9786ee",
             });
             return;
         }
@@ -731,16 +731,16 @@ class Cart extends Component {
             title: "",
             html: `
                 <div style="text-align:center;padding:0.2rem 0;">
-                    <div style="width:68px;height:68px;border-radius:22px;background:#2a69b0;display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.65rem;box-shadow:0 8px 24px rgba(42, 105, 176, 0.25);margin-bottom:1.2rem;">
+                    <div style="width:68px;height:68px;border-radius:22px;background:var(--snd-primary);display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.65rem;box-shadow:0 8px 24px rgba(151, 134, 238, 0.25);margin-bottom:1.2rem;">
                         ${sndIconMarkup("lock")}
                     </div>
 
                     <div style="font-size:1.95rem;font-weight:600;color:#1a1a1a;margin:0 0 0.2rem;letter-spacing:-0.03em;">${CommonHelper.getBrandName()}</div>
-                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:#2a69b0;text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
+                    <div style="font-size:0.75rem;letter-spacing:0.18em;color:var(--snd-primary-deep);text-transform:uppercase;font-weight:500;margin-bottom:1rem;">${CommonHelper.getBrandSubtitle()}</div>
 
-                    <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(42, 105, 176, 0.1);border:1px solid rgba(42, 105, 176, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
-                        <span style="width:8px;height:8px;border-radius:50%;background:#2a69b0;box-shadow:0 0 8px #2a69b0;"></span>
-                        <span style="font-size:0.76rem;letter-spacing:0.12em;color:#2a69b0;text-transform:uppercase;font-weight:600;">Counter Access</span>
+                    <div style="display:inline-flex;align-items:center;gap:0.55rem;background:rgba(151, 134, 238, 0.1);border:1px solid rgba(151, 134, 238, 0.3);border-radius:20px;padding:0.4rem 1.1rem;margin:0 auto 1.6rem;">
+                        <span style="width:8px;height:8px;border-radius:50%;background:var(--snd-primary);box-shadow:0 0 8px var(--snd-primary);"></span>
+                        <span style="font-size:0.76rem;letter-spacing:0.12em;color:var(--snd-primary-deep);text-transform:uppercase;font-weight:600;">Counter Access</span>
                     </div>
 
                     <div style="display:flex;flex-direction:column;gap:1.2rem;text-align:left;max-width:370px;margin:0 auto;">
@@ -749,11 +749,11 @@ class Cart extends Component {
                                 Select Counter
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("receipt", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.95rem;pointer-events:none;z-index:10;" })}
-                                <select id="swal-counter" style="width:100%;padding:0.85rem 2.5rem 0.85rem 2.8rem;border:1.5px solid #d0e4f5;border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;appearance:none;-webkit-appearance:none;cursor:pointer;box-sizing:border-box;transition:all 0.2s ease;">
+                                ${sndIconMarkup("receipt", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.95rem;pointer-events:none;z-index:10;" })}
+                                <select id="swal-counter" style="width:100%;padding:0.85rem 2.5rem 0.85rem 2.8rem;border:1.5px solid var(--snd-border-strong);border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;appearance:none;-webkit-appearance:none;cursor:pointer;box-sizing:border-box;transition:all 0.2s ease;">
                                     ${counterOptions}
                                 </select>
-                                ${sndIconMarkup("chevron-down", { id: "swal-counter-arrow", style: "position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;pointer-events:none;font-size:0.85rem;z-index:3;" })}
+                                ${sndIconMarkup("chevron-down", { id: "swal-counter-arrow", style: "position:absolute;right:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);pointer-events:none;font-size:0.85rem;z-index:3;" })}
                             </div>
                         </div>
 
@@ -762,12 +762,12 @@ class Cart extends Component {
                                 Counter Password
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("key", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.95rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("key", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.95rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-counter-pass" type="password"
                                        placeholder="Enter counter password"
-                                       style="width:100%;padding:0.85rem 2.8rem 0.85rem 2.8rem;border:1.5px solid #d0e4f5;border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;"
+                                       style="width:100%;padding:0.85rem 2.8rem 0.85rem 2.8rem;border:1.5px solid var(--snd-border-strong);border-radius:16px;font-size:0.95rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;"
                                        autocomplete="off">
-                                <button type="button" id="swal-pass-toggle" style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#2a69b0;cursor:pointer;font-size:0.95rem;padding:4px;display:flex;align-items:center;justify-content:center;z-index:2;">
+                                <button type="button" id="swal-pass-toggle" style="position:absolute;right:0.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--snd-primary-deep);cursor:pointer;font-size:0.95rem;padding:4px;display:flex;align-items:center;justify-content:center;z-index:2;">
                                     ${sndIconMarkup("eye", { id: "swal-pass-toggle-icon" })}
                                 </button>
                             </div>
@@ -777,7 +777,7 @@ class Cart extends Component {
             showCancelButton: true,
             cancelButtonText: "Back to Branch",
             confirmButtonText: "Open POS",
-            confirmButtonColor: "#2a69b0",
+            confirmButtonColor: "#9786ee",
             allowOutsideClick: false,
             allowEscapeKey: false,
             focusConfirm: false,
@@ -793,12 +793,12 @@ class Cart extends Component {
                             passInput.type = "text";
                             icon.outerHTML = sndIconMarkup("eye-off", { id: "swal-pass-toggle-icon" });
                             icon = document.getElementById("swal-pass-toggle-icon");
-                            toggleBtn.style.color = "#2a69b0";
+                            toggleBtn.style.color = getComputedStyle(document.documentElement).getPropertyValue("--snd-primary-deep").trim() || "#6758bd";
                         } else {
                             passInput.type = "password";
                             icon.outerHTML = sndIconMarkup("eye", { id: "swal-pass-toggle-icon" });
                             icon = document.getElementById("swal-pass-toggle-icon");
-                            toggleBtn.style.color = "#2a69b0";
+                            toggleBtn.style.color = getComputedStyle(document.documentElement).getPropertyValue("--snd-primary-deep").trim() || "#6758bd";
                         }
                     });
                 }
@@ -923,7 +923,7 @@ class Cart extends Component {
             title: "",
             html: `
                 <div style="text-align:center;padding:0.2rem 0 0.5rem;">
-                    <div style="width:60px;height:60px;border-radius:20px;background:#2a69b0;display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.5rem;box-shadow:0 8px 22px rgba(42, 105, 176, 0.3);margin-bottom:0.8rem;">
+                    <div style="width:60px;height:60px;border-radius:20px;background:var(--snd-primary);display:inline-flex;align-items:center;justify-content:center;color:#ffffff;font-size:1.5rem;box-shadow:0 8px 22px rgba(151, 134, 238, 0.3);margin-bottom:0.8rem;">
                         ${sndIconMarkup("user-plus")}
                     </div>
                     <div style="font-size:1.45rem;font-weight:600;color:#1a1a1a;margin-bottom:0.2rem;letter-spacing:-0.02em;">Create New Customer</div>
@@ -932,13 +932,13 @@ class Cart extends Component {
                     <div style="text-align:left;display:flex;flex-direction:column;gap:0.9rem;max-width:380px;margin:0 auto;">
                         <div>
                             <label style="font-weight:500;font-size:0.82rem;color:#262626;margin-bottom:0.35rem;display:flex;align-items:center;justify-content:space-between;">
-                                <span>First Name <span style="color:#2a69b0;">*</span></span>
-                                <span style="font-size:0.7rem;color:#2a69b0;font-weight:600;">Required</span>
+                                <span>First Name <span style="color:var(--snd-primary-deep);">*</span></span>
+                                <span style="font-size:0.7rem;color:var(--snd-primary-deep);font-weight:600;">Required</span>
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("user", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.9rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("user", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.9rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-cust-first" type="text" placeholder="e.g. Ayesha"
-                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid #d0e4f5;border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
+                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid var(--snd-border-strong);border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
                                        autocomplete="off">
                             </div>
                         </div>
@@ -948,9 +948,9 @@ class Cart extends Component {
                                 Last Name <span style="font-size:0.72rem;color:#94a3b8;font-weight:500;">(Optional)</span>
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("user", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.9rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("user", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.9rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-cust-last" type="text" placeholder="e.g. Khan"
-                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid #d0e4f5;border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
+                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid var(--snd-border-strong);border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
                                        autocomplete="off">
                             </div>
                         </div>
@@ -960,9 +960,9 @@ class Cart extends Component {
                                 Phone Number <span style="font-size:0.72rem;color:#94a3b8;font-weight:500;">(Optional)</span>
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("phone", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.9rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("phone", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.9rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-cust-phone" type="text" placeholder="e.g. +92 300 1234567"
-                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid #d0e4f5;border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
+                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid var(--snd-border-strong);border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
                                        autocomplete="off">
                             </div>
                         </div>
@@ -972,9 +972,9 @@ class Cart extends Component {
                                 Email Address <span style="font-size:0.72rem;color:#94a3b8;font-weight:500;">(Optional)</span>
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("mail", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.9rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("mail", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.9rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-cust-email" type="email" placeholder="e.g. ayesha@example.com"
-                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid #d0e4f5;border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
+                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid var(--snd-border-strong);border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
                                        autocomplete="off">
                             </div>
                         </div>
@@ -984,9 +984,9 @@ class Cart extends Component {
                                 Address <span style="font-size:0.72rem;color:#94a3b8;font-weight:500;">(Optional)</span>
                             </label>
                             <div style="position:relative;width:100%;">
-                                ${sndIconMarkup("map-pin", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:#2a69b0;font-size:0.9rem;pointer-events:none;z-index:2;" })}
+                                ${sndIconMarkup("map-pin", { style: "position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);color:var(--snd-primary-deep);font-size:0.9rem;pointer-events:none;z-index:2;" })}
                                 <input id="swal-cust-address" type="text" placeholder="e.g. Clifton Block 5, Karachi"
-                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid #d0e4f5;border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:#f0f6ff;color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
+                                       style="width:100%;padding:0.75rem 1rem 0.75rem 2.7rem;border:1.5px solid var(--snd-border-strong);border-radius:14px;font-size:0.9rem;font-weight:600;outline:none;background:var(--snd-primary-soft);color:#1a1a1a;box-sizing:border-box;transition:all 0.2s ease;"
                                        autocomplete="off">
                             </div>
                         </div>
@@ -996,7 +996,7 @@ class Cart extends Component {
 
             showCancelButton: true,
             confirmButtonText: "Save & Select Customer",
-            confirmButtonColor: "#2a69b0",
+            confirmButtonColor: "#9786ee",
             cancelButtonText: "Cancel",
             focusConfirm: false,
             showLoaderOnConfirm: true,
@@ -1039,7 +1039,7 @@ class Cart extends Component {
                 icon: "success",
                 title: "Customer Selected!",
                 text: `${fullName} has been created & selected.`,
-                confirmButtonColor: "#2a69b0",
+                confirmButtonColor: "#9786ee",
                 timer: 2000
             });
         }
@@ -1870,12 +1870,12 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
 
         return (
             <div key={`${p.item_type || "product"}:${p.id}`}
-                style={{ ...S.productTile, borderColor: isHovered ? "#0ea5b0" : "#e8ecf2", boxShadow: isHovered ? "0 6px 18px rgba(14,165,176,0.18)" : "none", transform: isHovered ? "translateY(-2px)" : "none" }}
+                style={{ ...S.productTile, borderColor: isHovered ? "var(--snd-primary)" : "#e8ecf2", boxShadow: isHovered ? "0 6px 18px rgba(151,134,238,0.18)" : "none", transform: isHovered ? "translateY(-2px)" : "none" }}
                 onMouseEnter={() => this.setState({ hoveredTile: p.id })}
                 onMouseLeave={() => this.setState({ hoveredTile: null })}
                 onClick={() => this.addProductToCart(p.barcode)}
                 title={p.name}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: isHovered ? "#0ea5b0" : "transparent" }} />
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: isHovered ? "var(--snd-primary)" : "transparent" }} />
                 <div style={S.productTileImgWrap}>
                     {p.image_url
                         ? <img src={p.image_url} alt={p.name} style={S.productTileImg}

@@ -36,7 +36,7 @@
                         <span style="font-weight:600;color:#0d3b45;">{{ $branch->name }}</span>
                     </td>
                     <td>
-                        <code style="background:#f0f9fa;color:#0ea5b0;padding:2px 8px;border-radius:5px;font-size:0.78rem;">
+                        <code style="background:var(--snd-primary-soft);color:var(--snd-primary-deep);padding:2px 8px;border-radius:5px;font-size:0.78rem;">
                             {{ $branch->code }}
                         </code>
                     </td>

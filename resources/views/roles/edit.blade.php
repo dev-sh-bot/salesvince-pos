@@ -85,7 +85,7 @@
 
                         @foreach ($permissions->groupBy('group_name') as $group => $groupPermissions)
                         <div class="snd-permission-group mb-3">
-                            <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#0ea5b0;margin-bottom:6px;">
+                            <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--snd-primary-deep);margin-bottom:6px;">
                                 {{ $group ?? 'General' }}
                             </div>
                             <div class="snd-permission-chips" style="display:flex;flex-wrap:wrap;gap:8px;">
@@ -94,7 +94,7 @@
                                     <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                            class="perm-check"
                                            {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}
-                                           style="accent-color:#0ea5b0;">
+                                           style="accent-color:var(--snd-primary);">
                                     {{ $permission->name }}
                                 </label>
                                 @endforeach

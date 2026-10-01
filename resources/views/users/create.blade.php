@@ -80,7 +80,7 @@
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
                             <input type="checkbox" name="is_active" value="1"
                                    {{ old('is_active', true) ? 'checked' : '' }}
-                                   style="accent-color:#0ea5b0;width:16px;height:16px;">
+                                   style="accent-color:var(--snd-primary);width:16px;height:16px;">
                             Active (user can log in)
                         </label>
                     </div>
@@ -100,7 +100,7 @@
                             <label class="assign-chip">
                                 <input type="checkbox" name="roles[]" value="{{ $role->id }}"
                                        {{ in_array($role->id, old('roles', [])) ? 'checked' : '' }}
-                                       style="accent-color:#0ea5b0;">
+                                       style="accent-color:var(--snd-primary);">
                                 {{ $role->name }}
                             </label>
                             @endforeach
@@ -113,7 +113,7 @@
                         <label>Direct Permissions</label>
                         @foreach($permissions->groupBy('group_name') as $group => $groupPermissions)
                         <div class="mb-3">
-                            <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#0ea5b0;margin-bottom:6px;">
+                            <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--snd-primary-deep);margin-bottom:6px;">
                                 {{ $group ?? 'General' }}
                             </div>
                             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
@@ -121,7 +121,7 @@
                                 <label class="assign-chip">
                                     <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                            {{ in_array($permission->id, old('permissions', [])) ? 'checked' : '' }}
-                                           style="accent-color:#0ea5b0;">
+                                           style="accent-color:var(--snd-primary);">
                                     {{ $permission->name }}
                                 </label>
                                 @endforeach
@@ -156,10 +156,10 @@
                                 <input type="checkbox" name="branches[]" value="{{ $branch->id }}"
                                        {{ in_array($branch->id, old('branches', [])) ? 'checked' : '' }}
                                        class="branch-check"
-                                       style="accent-color:#0ea5b0;width:15px;height:15px;flex-shrink:0;">
+                                       style="accent-color:var(--snd-primary);width:15px;height:15px;flex-shrink:0;">
                                 <div>
                                     <span style="font-weight:600;font-size:0.84rem;color:#0d3b45;">{{ $branch->name }}</span>
-                                    <code style="background:#f0f9fa;color:#0ea5b0;padding:1px 7px;border-radius:4px;font-size:0.74rem;margin-left:6px;">{{ $branch->code }}</code>
+                                    <code style="background:var(--snd-primary-soft);color:var(--snd-primary-deep);padding:1px 7px;border-radius:4px;font-size:0.74rem;margin-left:6px;">{{ $branch->code }}</code>
                                 </div>
                             </label>
                             @endforeach
@@ -220,10 +220,10 @@ function refreshCounters() {
         counterList.insertAdjacentHTML('beforeend', `
             <label class="assign-row counter-row">
                 <input type="checkbox" name="counters[]" value="${c.id}" ${checked}
-                       style="accent-color:#0ea5b0;width:15px;height:15px;flex-shrink:0;" class="counter-check">
+                       style="accent-color:var(--snd-primary);width:15px;height:15px;flex-shrink:0;" class="counter-check">
                 <div>
                     <span style="font-weight:600;font-size:0.84rem;color:#0d3b45;">${c.name}</span>
-                    <code style="background:#f0f9fa;color:#0ea5b0;padding:1px 7px;border-radius:4px;font-size:0.74rem;margin-left:6px;">${c.code}</code>
+                    <code style="background:var(--snd-primary-soft);color:var(--snd-primary-deep);padding:1px 7px;border-radius:4px;font-size:0.74rem;margin-left:6px;">${c.code}</code>
                 </div>
             </label>`);
     });
@@ -235,14 +235,14 @@ function refreshCounters() {
 function applyHighlight(cb) {
     const row = cb.closest('.assign-row');
     if (!row) return;
-    const update = () => row.style.borderColor = cb.checked ? '#0ea5b0' : '#e2e8f0';
+    const update = () => row.style.borderColor = cb.checked ? 'var(--snd-primary)' : '#e2e8f0';
     update();
     cb.addEventListener('change', update);
 }
 
 document.querySelectorAll('.branch-check').forEach(cb => {
     const row = cb.closest('.assign-row');
-    const update = () => { if (row) row.style.borderColor = cb.checked ? '#0ea5b0' : '#e2e8f0'; };
+    const update = () => { if (row) row.style.borderColor = cb.checked ? 'var(--snd-primary)' : '#e2e8f0'; };
     update();
     cb.addEventListener('change', () => { update(); refreshCounters(); });
 });

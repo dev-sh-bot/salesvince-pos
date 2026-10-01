@@ -66,7 +66,7 @@
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                             <input type="checkbox" name="is_active" value="1"
                                    {{ old('is_active', $counter->is_active) ? 'checked' : '' }}
-                                   style="accent-color:#0ea5b0;width:16px;height:16px;">
+                                   style="accent-color:var(--snd-primary);width:16px;height:16px;">
                             <span style="font-weight:500;">Counter is Active</span>
                         </label>
                     </div>
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <label class="snd-form-toggle">
-                            <input type="checkbox" id="show_pass" style="accent-color:#0ea5b0;">
+                            <input type="checkbox" id="show_pass" style="accent-color:var(--snd-primary);">
                             Show passwords
                         </label>
                     </div>
@@ -114,7 +114,7 @@
     <div class="col-lg-5">
         <div class="card">
             <div class="card-header">
-                <x-snd-icon name="users" class="mr-2" style="color:#0ea5b0;" />Assign Users
+                <x-snd-icon name="users" class="mr-2" style="color:var(--snd-primary-deep);" />Assign Users
                 <span class="badge badge-primary ml-2">{{ $counter->users_count }}</span>
             </div>
             <div class="card-body">
@@ -141,8 +141,8 @@
                                 <input type="checkbox" name="users[]" value="{{ $user->id }}"
                                        {{ in_array($user->id, $assignedUsers) ? 'checked' : '' }}
                                        {{ !$isBranchUser ? 'disabled' : '' }}
-                                       style="accent-color:#0ea5b0;width:15px;height:15px;flex-shrink:0;">
-                                <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0ea5b0,#0d3b45);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;flex-shrink:0;">
+                                       style="accent-color:var(--snd-primary);width:15px;height:15px;flex-shrink:0;">
+                                <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--snd-primary),var(--snd-primary-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:600;flex-shrink:0;">
                                     {{ strtoupper(substr($user->first_name,0,1)) }}
                                 </div>
                                 <div>
@@ -175,7 +175,7 @@ document.querySelector('[name="code"]').addEventListener('input', function () {
 });
 document.querySelectorAll('.user-assign-row input[type="checkbox"]:not([disabled])').forEach(cb => {
     const row = cb.closest('.user-assign-row');
-    const update = () => row.style.borderColor = cb.checked ? '#0ea5b0' : '#e2e8f0';
+    const update = () => row.style.borderColor = cb.checked ? 'var(--snd-primary)' : '#e2e8f0';
     update();
     cb.addEventListener('change', update);
 });
