@@ -273,6 +273,7 @@ class Cart extends Component {
             translations: {},
             hoveredTile: null,
             hoveredRemove: null,
+            lastPlacedOrder: null,
         };
 
         // gate
@@ -295,6 +296,7 @@ class Cart extends Component {
         this.handleSeach = this.handleSeach.bind(this);
         this.setCustomerId = this.setCustomerId.bind(this);
         this.handleClickSubmit = this.handleClickSubmit.bind(this);
+        this.handleOpenLastInvoice = this.handleOpenLastInvoice.bind(this);
         this.setTaxPercent = this.setTaxPercent.bind(this);
         this.setTaxAmount = this.setTaxAmount.bind(this);
         this.setDiscountPercent = this.setDiscountPercent.bind(this);
@@ -1743,19 +1745,19 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
             ? `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(srbQrCodeLink)}`
             : "";
         const srbFooter = srbInvoiceId ? `
-            <div class="srb-footer">
-                <div class="srb-row">
-                    <div class="srb-logo-cell">${window.APP.srb_pos_logo_url ? `<img class="srb-pos-logo" src="${window.APP.srb_pos_logo_url}" alt="SRB POS">` : ""}</div>
-                    <div class="srb-code-cell">
-                        <div class="srb-label">SRB Invoice No.</div>
-                        <div class="srb-invoice-id">${srbInvoiceId}</div>
-                        <div class="logos-srb">
-                            <img src="${imageUrl}" alt="SRB Logo">
-                        </div>
-                    </div>
+        <div class="srb-footer">
+            <div class="srb-row" style="display:flex;align-items:center;justify-content:center;gap:12px;">
+                <div class="srb-logo-cell logos-srb" style="display:flex;align-items:center;justify-content:center;width:95px;height:95px;margin-top:20px;">
+                    <img src="${imageUrl}" alt="SRB Logo" style="width:95px !important;height:95px !important;object-fit:contain;display:block;">
                 </div>
-                <div class="srb-verify">Scan to verify this invoice</div>
-            </div>` : "";
+                <div class="srb-code-cell" style="display:flex;flex-direction:column;align-items:center;">
+                    <div class="srb-label">SRB Invoice No.</div>
+                    <div class="srb-invoice-id">${srbInvoiceId}</div>
+                    ${srbQrImage ? `<div><img class="srb-qr" src="${srbQrImage}" style="width:80px !important;height:80px !important;display:block;"></div>` : ""}
+                </div>
+            </div>
+            <div class="srb-verify">Scan to verify this invoice</div>
+        </div>` : "";
 
         const receiptHTML = `
             <div id="thermal-receipt" class="thermal-receipt">
@@ -1804,25 +1806,134 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
         Swal.fire({
             // title: "Thermal Print Receipt",
             html: `<style>
-                .receipt-modal .swal2-html-container{margin:0;padding:0 10px}
-                ${CommonHelper.getThermalPrintStyles()}
+                .receipt-modal.swal2-popup {
+                    background: #ffffff !important;
+                    border-radius: 16px !important;
+                    padding: 16px 12px 20px !important;
+                    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35) !important;
+                    max-width: 410px !important;
+                }
+                .receipt-modal .swal2-html-container {
+                    margin: 0 !important;
+                    padding: 2px 6px !important;
+                    overflow-y: auto !important;
+                    overflow-x: hidden !important;
+                    max-height: 72vh !important;
+                    text-align: left !important;
+                }
+                .receipt-modal .swal2-actions {
+                    margin-top: 14px !important;
+                    gap: 10px !important;
+                }
+                ${CommonHelper.getReceiptStyles()}
             </style>
             ${receiptHTML}`,
-            width: 440, showCancelButton: true,
-            confirmButtonText: "Print",
-            confirmButtonColor: "#2a69b0",
+            width: 410,
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-print" style="margin-right: 6px;"></i> Print Receipt',
+            confirmButtonColor: "var(--snd-primary)",
             cancelButtonText: "Close",
             customClass: { popup: "receipt-modal" },
-        }).then(result => { if (result.isConfirmed) this.printReceipt(order); });
+            didClose: () => {
+                setTimeout(() => {
+                    document.querySelectorAll(".swal2-container").forEach(el => el.remove());
+                    document.body.classList.remove("swal2-shown", "swal2-height-auto");
+                    document.body.style.overflow = "";
+                    document.querySelectorAll("[aria-hidden='true']").forEach(el => el.removeAttribute("aria-hidden"));
+                    window.focus();
+                }, 100);
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                this.printReceipt(order, receiptHTML);
+            }
+        });
     }
 
-    printReceipt(order) {
-        const receipt = document.getElementById("thermal-receipt");
-        if (!receipt) return;
-        const win = window.open("", "_blank", "width=450,height=700");
-        win.document.write(`<!doctype html><html><head><title>Receipt #${order.id}</title>
-        <style>${CommonHelper.getThermalPrintStyles()}</style></head><body>${receipt.outerHTML}</body></html>`);
-        win.document.close(); win.focus(); win.print(); win.close();
+    printReceipt(order, receiptHtmlContent = null) {
+        if (!order) return;
+        let content = receiptHtmlContent;
+        if (!content) {
+            const el = document.getElementById("thermal-receipt");
+            content = el ? el.outerHTML : "";
+        }
+        if (!content) return;
+
+        const printStyles = CommonHelper.getThermalPrintStyles();
+        const title = `Receipt #${order.invoice_no || order.id}`;
+
+        // Open print window synchronously while user gesture is active
+        const printWin = window.open("", "_blank", "width=450,height=700");
+
+        // Immediately close SweetAlert and purge any screen-blocking overlays
+        try {
+            Swal.close();
+        } catch (e) {}
+        document.querySelectorAll(".swal2-container").forEach(el => el.remove());
+        document.body.classList.remove("swal2-shown", "swal2-height-auto");
+        document.body.style.overflow = "";
+        document.querySelectorAll("[aria-hidden='true']").forEach(el => el.removeAttribute("aria-hidden"));
+
+        if (!printWin) {
+            Swal.fire({
+                icon: "warning",
+                title: "Popup Blocked",
+                text: "Please allow popups for this site in your browser to print receipts.",
+                confirmButtonColor: "var(--snd-primary)",
+            });
+            return;
+        }
+
+        printWin.document.open();
+        printWin.document.write(`<!doctype html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>${title}</title>
+            <style>${printStyles}</style>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>`);
+        printWin.document.close();
+
+        const restoreParentUI = () => {
+            window.focus();
+            document.querySelectorAll(".swal2-container").forEach(el => el.remove());
+            document.body.classList.remove("swal2-shown", "swal2-height-auto");
+            document.body.style.overflow = "";
+            document.querySelectorAll("[aria-hidden='true']").forEach(el => el.removeAttribute("aria-hidden"));
+        };
+
+        const doPrint = () => {
+            try {
+                printWin.focus();
+                printWin.print();
+                printWin.close();
+            } catch (e) {}
+            restoreParentUI();
+        };
+
+        const images = printWin.document.images;
+        if (images && images.length > 0) {
+            let loaded = 0;
+            const checkDone = () => {
+                loaded++;
+                if (loaded >= images.length) setTimeout(doPrint, 100);
+            };
+            for (let i = 0; i < images.length; i++) {
+                if (images[i].complete) {
+                    loaded++;
+                } else {
+                    images[i].onload = checkDone;
+                    images[i].onerror = checkDone;
+                }
+            }
+            if (loaded >= images.length) setTimeout(doPrint, 100);
+        } else {
+            setTimeout(doPrint, 100);
+        }
     }
 
     // ''‚''‚¬ Render helpers ''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚¬
@@ -2244,8 +2355,8 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                             <div className="pos-order-actions">
                                 <button type="button" onClick={this.handleClickSubmit}>Place an Order</button>
                                 <div className="pos-action-grid">
-                                    <button type="button" className="pos-secondary-action">Print</button>
-                                    <button type="button" className="pos-secondary-action">Invoice</button>
+                                    <button type="button" className="pos-secondary-action" onClick={() => this.state.cart.length ? this.handleClickSubmit() : this.state.lastPlacedOrder ? this.printReceipt(this.state.lastPlacedOrder) : this.handleClickSubmit()}><SndIcon name="printer" /> Print</button>
+                                    <button type="button" className="pos-secondary-action" onClick={this.handleOpenLastInvoice}><SndIcon name="receipt" /> Invoice</button>
                                     <button type="button" className="pos-secondary-action">Draft</button>
                                 </div>
                             </div>

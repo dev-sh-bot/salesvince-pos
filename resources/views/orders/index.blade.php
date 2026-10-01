@@ -83,10 +83,12 @@
                                 data-toggle="modal"
                                 data-target="#modalInvoice"
                                 data-order-id="{{ $order->id }}"
-                                data-invoice-no="{{ $order->invoice_no ?? 'POS-' . str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
+                                data-invoice-no="{{ $order->invoice_no ?? 'POS-' . str_pad($order->id, 3, '0', STR_PAD_LEFT) }}"
                                 data-customer-name="{{ $order->getCustomerName() }}"
                                 data-branch-name="{{ $order->branch?->name ?? '—' }}"
                                 data-branch-code="{{ $order->branch?->code ?? '' }}"
+                                data-branch-address="{{ $order->branch?->address ?? '' }}"
+                                data-branch-phone="{{ $order->branch?->phone ?? '' }}"
                                 data-counter-name="{{ $order->counter?->name ?? '—' }}"
                                 data-counter-code="{{ $order->counter?->code ?? '' }}"
                                 data-total="{{ $orderTotal }}"
@@ -99,16 +101,20 @@
                                 data-srb-qr-link="{{ $order->srb_qr_code_link ?? '' }}"
                                 data-received="{{ $orderReceived }}"
                                 data-items="{{ base64_encode($order->items->toJson()) }}"
-                                data-created-at="{{ $order->created_at }}">
+                                data-created-at="{{ $order->created_at->format('m/d/Y, h:i:s A') . ' PST' }}"
+                                data-invoice-date="{{ $order->created_at->format('m/d/Y') }}"
+                                data-invoice-time="{{ $order->created_at->format('h:i:s A') }} PST">
                                 <x-snd-icon name="eye" />
                             </button>
                             <button
                                 type="button"
                                 class="btn btn-sm btn-primary btnPrintOrder"
                                 data-order-id="{{ $order->id }}"
-                                data-invoice-no="{{ $order->invoice_no ?? 'POS-' . str_pad($order->id, 4, '0', STR_PAD_LEFT) }}"
+                                data-invoice-no="{{ $order->invoice_no ?? 'POS-' . str_pad($order->id, 3, '0', STR_PAD_LEFT) }}"
                                 data-customer-name="{{ $order->getCustomerName() }}"
                                 data-branch-name="{{ $order->branch?->name ?? '-' }}"
+                                data-branch-address="{{ $order->branch?->address ?? '' }}"
+                                data-branch-phone="{{ $order->branch?->phone ?? '' }}"
                                 data-counter-name="{{ $order->counter?->name ?? '-' }}"
                                 data-total="{{ $orderTotal }}"
                                 data-subtotal="{{ $order->subtotal ?? $orderTotal }}"
@@ -403,6 +409,8 @@ function printThermalReceipt(button) {
     var invoiceTitleNo = 'Order ID-' + String(orderId).padStart(4, '0');
     var customerName = button.data('customer-name') || 'Walk-in Customer';
     var branchName = button.data('branch-name') || 'Main Branch';
+    var branchAddress = button.data('branch-address') || '';
+    var branchPhone = button.data('branch-phone') || '';
     var counterName = button.data('counter-name') || 'Counter 1';
     var subtotal = parseFloat(button.data('subtotal')) || 0;
     var taxPercent = parseFloat(button.data('tax-percent')) || 0;
@@ -420,18 +428,19 @@ function printThermalReceipt(button) {
     var items = getOrderItems(button);
     var imageUrl = window.location.origin + '/images/srb.jfif';
     var itemsHTML = items.map(function(item) {
+        var isDeal = Number(item.item_type) === 2 || item.item_type === 'deal';
         var isService = Number(item.item_type) === 1 || item.item_type === 'service';
         var quantity = Number(item.quantity || 0);
         var lineTotal = Number(item.price || 0);
         var unitPrice = quantity ? (lineTotal / quantity) : lineTotal;
-        var name = item.item_name || (isService ? 'Service' : ((item.product && item.product.name) || 'Product'));
+        var name = item.item_name || (isDeal ? ((item.deal && item.deal.name) || 'Deal Package') : isService ? ((item.service && item.service.name) || 'Service') : ((item.product && item.product.name) || 'Product'));
         return '<div class="receipt-item-block">' +
                '<div class="receipt-item-name">' + name + '</div>' +
                '<div class="receipt-item-row"><span class="col-item"></span><span class="col-qty">' + quantity + '</span><span class="col-price">' + unitPrice.toFixed(2) + '</span><span class="col-total">' + lineTotal.toFixed(2) + '</span></div>' +
                '</div>';
     }).join('');
 
-    var headerHTML = window.CommonHelper ? window.CommonHelper.getReceiptHeaderHTML({ branchName: branchName }) : '';
+    var headerHTML = window.CommonHelper ? window.CommonHelper.getReceiptHeaderHTML({ branchName: branchName, branchAddress: branchAddress, branchPhone: branchPhone }) : '';
     var footerHTML = window.CommonHelper ? window.CommonHelper.getReceiptFooterHTML(createdAt) : '';
     var printStyles = window.CommonHelper ? window.CommonHelper.getThermalPrintStyles() : '';
     var barcodeSvg = buildBarcodeSvg(invoiceNo);
