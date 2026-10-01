@@ -30,6 +30,7 @@ $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
   --snd-primary: #9786ee;
   --snd-primary-hover: #806fda;
   --snd-primary-deep: #6758bd;
+  --snd-button-primary-text: #fff;
   --snd-primary-soft: #f0edff;
   --snd-primary-wash: rgba(151, 134, 238, 0.1);
   --snd-primary-ring: rgba(151, 134, 238, 0.26);
@@ -846,13 +847,47 @@ label.snd-form-toggle { display: flex; align-items: center; gap: 8px; min-height
 .pos-search-control { display: flex; align-items: center; gap: 8px; min-width: 190px; padding: 6px 10px; border: 1px solid var(--snd-border); border-radius: 11px; background: rgba(255,255,255,.86); }
 .pos-search-control input { width: 150px; padding: 0; border: 0; outline: 0; background: transparent; color: var(--snd-ink); font-size: .72rem; }
 .pos-search-control i, .pos-search-control .snd-icon { color: var(--snd-muted); font-size: .72rem; }
+.pos-search-clear { display: inline-flex; align-items: center; justify-content: center; padding: 2px; border: 0; background: transparent; color: var(--snd-muted); cursor: pointer; }
+.pos-search-clear:hover { color: var(--snd-primary-deep); }
+.pos-catalog-switch { display: inline-flex; align-items: center; gap: 4px; padding: 4px; border: 1px solid var(--snd-border); border-radius: 11px; background: rgba(255,255,255,.72); }
+.pos-catalog-tab { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border: 0; border-radius: 8px; background: transparent; color: var(--snd-ink-soft); cursor: pointer; font-size: .7rem; font-weight: var(--snd-font-semibold); transition: background .16s ease, color .16s ease, box-shadow .16s ease; }
+.pos-catalog-tab .snd-icon { width: 14px; height: 14px; }
+.pos-catalog-tab > span { min-width: 19px; padding: 2px 5px; border-radius: 7px; background: rgba(27,31,51,.07); font-size: .6rem; text-align: center; }
+.pos-catalog-tab.is-active { background: var(--snd-primary); color: var(--snd-button-primary-text); box-shadow: 0 4px 10px rgba(151,134,238,.22); }
+.pos-catalog-tab.is-active > span { background: rgba(255,255,255,.22); }
 .pos-filter-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 15px; }
 .pos-filter-chip { padding: 7px 12px; border: 1px solid var(--snd-border-strong); border-radius: 10px; background: rgba(255,255,255,.72); color: var(--snd-ink-soft); cursor: pointer; font-size: .69rem; font-weight: var(--snd-font-medium); white-space: nowrap; transition: border-color .16s ease, background .16s ease, color .16s ease, transform .16s ease; }
 .pos-filter-chip:hover { transform: translateY(-1px); border-color: rgba(151,134,238,.4); background: var(--snd-primary-soft); color: var(--snd-primary-deep); }
-.pos-filter-chip.is-active { border-color: var(--snd-primary); background: var(--snd-primary); color: #fff; box-shadow: 0 6px 14px rgba(151,134,238,.2); }
+.pos-filter-chip.is-active { border-color: var(--snd-primary); background: var(--snd-primary); color: var(--snd-button-primary-text); box-shadow: 0 6px 14px rgba(151,134,238,.2); }
 .pos-product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 11px; align-content: start; }
+.pos-deal-card { min-width: 0; min-height: 265px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--snd-border); border-radius: var(--snd-radius-md); background: rgba(255,255,255,.84); box-shadow: 0 5px 15px rgba(27,31,51,.04); transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+.pos-deal-card:hover, .pos-deal-card.is-in-cart { transform: translateY(-1px); border-color: var(--snd-primary); box-shadow: 0 9px 20px rgba(151,134,238,.13); }
+.pos-deal-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; padding: 9px 11px; border-bottom: 1px solid var(--snd-border); background: var(--snd-primary-wash); }
+.pos-deal-badge, .pos-deal-discount { display: inline-flex; align-items: center; gap: 5px; padding: 3px 7px; border: 1px solid var(--snd-border-strong); border-radius: 7px; color: var(--snd-primary-deep); background: rgba(255,255,255,.8); font-size: .59rem; font-weight: var(--snd-font-bold); text-transform: uppercase; }
+.pos-deal-badge .snd-icon { width: 12px; height: 12px; }
+.pos-deal-discount { color: #238b43; text-transform: none; }
+.pos-deal-body { display: flex; flex: 1; flex-direction: column; gap: 7px; padding: 11px 12px; }
+.pos-deal-name { margin: 0; color: var(--snd-ink); font-size: .84rem; font-weight: var(--snd-font-bold); line-height: 1.3; }
+.pos-deal-description { margin: 0; color: var(--snd-ink-soft); font-size: .68rem; line-height: 1.4; }
+.pos-deal-services-title { margin-top: 2px; color: var(--snd-muted); font-size: .61rem; font-weight: var(--snd-font-semibold); letter-spacing: .04em; text-transform: uppercase; }
+.pos-deal-services { display: flex; flex-direction: column; gap: 4px; max-height: 105px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.pos-deal-services li { display: flex; align-items: flex-start; gap: 6px; padding: 5px 7px; border: 1px solid var(--snd-border); border-radius: 7px; background: rgba(248,249,253,.75); color: var(--snd-ink-soft); font-size: .67rem; line-height: 1.3; }
+.pos-deal-services li .snd-icon { width: 12px; height: 12px; flex: 0 0 auto; color: var(--snd-primary); }
+.pos-deal-services li.is-empty { color: var(--snd-muted); font-style: italic; }
+.pos-deal-barcode { align-self: flex-start; color: var(--snd-muted); font-size: .62rem; }
+.pos-deal-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 11px; border-top: 1px dashed var(--snd-border-strong); background: rgba(151,134,238,.035); }
+.pos-deal-pricing { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.pos-deal-pricing del { color: var(--snd-muted); font-size: .62rem; }
+.pos-deal-pricing strong { color: var(--snd-primary-deep); font-size: .92rem; }
+.pos-deal-pricing small { color: #238b43; font-size: .6rem; font-weight: var(--snd-font-semibold); }
+.pos-deal-add, .pos-deal-qty button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 9px; border: 0; border-radius: 8px; background: var(--snd-primary); color: var(--snd-button-primary-text); cursor: pointer; font-size: .66rem; font-weight: var(--snd-font-semibold); white-space: nowrap; }
+.pos-deal-add .snd-icon { width: 13px; height: 13px; }
+.pos-deal-qty { display: flex; align-items: center; gap: 6px; }
+.pos-deal-qty button { width: 25px; height: 25px; padding: 0; }
+.pos-deal-qty span { min-width: 14px; color: var(--snd-primary-deep); font-size: .72rem; font-weight: var(--snd-font-bold); text-align: center; }
 .pos-product-card, .product-tile { position: relative; overflow: hidden; border: 1px solid var(--snd-border) !important; border-radius: var(--snd-radius-md) !important; background: rgba(255,255,255,.78) !important; box-shadow: 0 5px 15px rgba(27,31,51,.035) !important; cursor: pointer; user-select: none; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
 .pos-product-card:hover, .product-tile:hover { transform: translateY(-2px); border-color: var(--snd-primary) !important; box-shadow: 0 10px 20px rgba(151,134,238,.14) !important; }
+.pos-product-card.is-in-cart { border-color: var(--snd-primary) !important; background: rgba(240,237,255,.72) !important; box-shadow: 0 8px 18px rgba(151,134,238,.12) !important; }
 .pos-product-card.is-hovered { transform: translateY(-2px); border-color: var(--snd-primary) !important; box-shadow: 0 10px 20px rgba(151,134,238,.14) !important; }
 .pos-product-accent { height: 3px; background: transparent; }
 .pos-product-card:hover .pos-product-accent, .pos-product-card.is-hovered .pos-product-accent { background: var(--snd-primary); }

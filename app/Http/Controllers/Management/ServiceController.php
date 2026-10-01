@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Management;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Service\ServiceStoreRequest;
 use App\Http\Requests\Service\ServiceUpdateRequest;
+use App\Models\Category;
 use App\Models\Service;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -26,19 +27,31 @@ class ServiceController extends Controller
 
     public function index(Request $request)
     {
-        $services = Service::query()
+        $query = Service::query()
+            ->with('category')
             ->when($request->search, fn ($query, $term) => $query->where('name', 'like', "%{$term}%"))
-            ->latest()
-            ->paginate(25);
+            ->when($request->category_id, fn ($query, $categoryId) => $query->where('category_id', $categoryId))
+            ->latest();
 
-        return $request->wantsJson()
-            ? response()->json($services)
-            : view('services.index', ['services' => $services]);
+        if ($request->wantsJson()) {
+            if ($request->boolean('all')) {
+                return response()->json(['data' => $query->get()]);
+            }
+
+            return response()->json($query->paginate(25));
+        }
+
+        return view('services.index', [
+            'services' => $query->paginate(25)->withQueryString(),
+            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
+        ]);
     }
 
     public function create(): View|Factory
     {
-        return view('services.create');
+        return view('services.create', [
+            'categories' => Category::where('status', true)->orderBy('sort_order')->orderBy('name')->get(),
+        ]);
     }
 
     public function store(ServiceStoreRequest $request): RedirectResponse
@@ -62,7 +75,10 @@ class ServiceController extends Controller
 
     public function edit(Service $service): View|Factory
     {
-        return view('services.edit')->with('service', $service);
+        return view('services.edit', [
+            'service' => $service,
+            'categories' => Category::where('status', true)->orderBy('sort_order')->orderBy('name')->get(),
+        ]);
     }
 
     public function update(ServiceUpdateRequest $request, Service $service): RedirectResponse

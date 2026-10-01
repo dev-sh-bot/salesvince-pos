@@ -38,10 +38,26 @@
                     </li>
                 @endcan
 
+                @can('categories.view')
+                    <li class="nav-item" data-label="Categories">
+                        <a href="{{ route('categories.index') }}" class="nav-link {{ activeSegment('categories') }}" data-tooltip="Categories" title="Categories">
+                            <i class="nav-icon fas fa-layer-group"></i><p>Categories</p>
+                        </a>
+                    </li>
+                @endcan
+
                 @can('services.view')
                     <li class="nav-item" data-label="Services">
                         <a href="{{ route('services.index') }}" class="nav-link {{ activeSegment('services') }}" data-tooltip="Services" title="Services">
                             <x-snd-icon name="briefcase" class="nav-icon" /><p>Services</p>
+                        </a>
+                    </li>
+                @endcan
+
+                @can('deals.view')
+                    <li class="nav-item" data-label="Deals">
+                        <a href="{{ route('deals.index') }}" class="nav-link {{ activeSegment('deals') }}" data-tooltip="Deals" title="Deals">
+                            <i class="nav-icon fas fa-tags"></i><p>Deals</p>
                         </a>
                     </li>
                 @endcan

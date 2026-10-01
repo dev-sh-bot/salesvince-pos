@@ -108,9 +108,9 @@ class DashboardDemoSeeder extends Seeder
                     $price = (float) $prod->price;
                     $subtotal += ($price * $qty);
                     $itemsToCreate[] = [
-                        'item_type' => 'product',
+                        'item_type' => 0,
                         'item_name' => $prod->name,
-                        'product_id' => $prod->id,
+                        'item_id' => $prod->id,
                         'price' => $price,
                         'quantity' => $qty,
                         'created_at' => $createdAt,
@@ -124,9 +124,9 @@ class DashboardDemoSeeder extends Seeder
                     $srvPrice = (float) ($srv->price > 0 ? $srv->price : rand(200, 800));
                     $subtotal += $srvPrice;
                     $itemsToCreate[] = [
-                        'item_type' => 'service',
+                        'item_type' => 1,
                         'item_name' => $srv->name,
-                        'product_id' => $products->first()->id,
+                        'item_id' => $srv->id,
                         'price' => $srvPrice,
                         'quantity' => 1,
                         'created_at' => $createdAt,
@@ -184,9 +184,9 @@ class DashboardDemoSeeder extends Seeder
                 $price = (float) $prod->price;
                 $subtotal += ($price * $qty);
                 $itemsToCreate[] = [
-                    'item_type' => 'product',
+                    'item_type' => 0,
                     'item_name' => $prod->name,
-                    'product_id' => $prod->id,
+                    'item_id' => $prod->id,
                     'price' => $price,
                     'quantity' => $qty,
                     'created_at' => $todayTime,

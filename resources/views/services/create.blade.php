@@ -27,6 +27,18 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label for="category_id">Category</label>
+                        <select name="category_id" class="form-control @error('category_id') is-invalid @enderror" id="category_id" required>
+                            <option value="">Select Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ (string) old('category_id') === (string) $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')<span class="invalid-feedback"><strong>{{ $message }}</strong></span>@enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label for="barcode">Barcode</label>
                         <input type="text" name="barcode" class="form-control @error('barcode') is-invalid @enderror" id="barcode" value="{{ old('barcode') }}">
                         @error('barcode')<span class="invalid-feedback"><strong>{{ $message }}</strong></span>@enderror

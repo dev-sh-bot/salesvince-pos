@@ -22,8 +22,9 @@ class AddToCartRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     $existsInProducts = Product::where('barcode', $value)->exists();
                     $existsInServices = Service::where('barcode', $value)->exists();
+                    $existsInDeals = \App\Models\Deal::where('barcode', $value)->where('status', true)->exists();
 
-                    if (! $existsInProducts && ! $existsInServices) {
+                    if (! $existsInProducts && ! $existsInServices && ! $existsInDeals) {
                         $fail(__('cart.validation.barcode_not_found'));
                     }
                 },

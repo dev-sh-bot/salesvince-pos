@@ -25,7 +25,7 @@ class OrderItemFactory extends Factory
         return [
             'price' => $this->faker->randomFloat(4, 10, 999),
             'quantity' => $this->faker->numberBetween(0, 100),
-            'product_id' => Product::factory(),
+            'item_id' => Product::factory(),
             'order_id' => Order::factory()
         ];
     }
@@ -47,7 +47,7 @@ class OrderItemFactory extends Factory
     public function forProduct(Product $product): Factory|OrderItemFactory
     {
         return $this->state(fn(array $attributes): array => [
-            'product_id' => $product->id,
+            'item_id' => $product->id,
             'price' => $product->price
         ]);
     }

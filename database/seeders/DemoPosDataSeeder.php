@@ -454,7 +454,7 @@ class DemoPosDataSeeder extends Seeder
             if ($services->isNotEmpty() && $index % 4 === 0) {
                 $service = $services[($index / 4 - 1) % $services->count()];
                 $lineTotal = (float) $service->rate;
-                $lines[] = [1, $products->first()->id, $service->name, 1, $lineTotal];
+                $lines[] = [1, $service->id, $service->name, 1, $lineTotal];
                 $subtotal += $lineTotal;
             }
 
@@ -484,7 +484,7 @@ class DemoPosDataSeeder extends Seeder
             foreach ($lines as [$itemType, $productId, $itemName, $quantity, $lineTotal]) {
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'product_id' => $productId,
+                    'item_id' => $productId,
                     'item_type' => $itemType,
                     'item_name' => $itemName,
                     'price' => $lineTotal,

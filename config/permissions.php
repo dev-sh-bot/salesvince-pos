@@ -29,11 +29,23 @@ return [
         'products.edit',
         'products.delete',
     ],
+    'categories' => [
+        'categories.view',
+        'categories.create',
+        'categories.edit',
+        'categories.delete',
+    ],
     'services' => [
         'services.view',
         'services.create',
         'services.edit',
         'services.delete',
+    ],
+    'deals' => [
+        'deals.view',
+        'deals.create',
+        'deals.edit',
+        'deals.delete',
     ],
     'customers' => [
         'customers.view',

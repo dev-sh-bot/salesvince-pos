@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Cart\AddToCartRequest;
 use App\Http\Requests\Cart\ChangeQuantityRequest;
 use App\Http\Requests\Cart\RemoveFromCartRequest;
+use App\Models\Category;
+use App\Models\Deal;
 use App\Models\Product;
 use App\Models\Service;
 use Illuminate\Http\JsonResponse;
@@ -19,7 +21,7 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('can:orders.create')->only(['index', 'store', 'changeQty', 'delete', 'empty']);
+        $this->middleware('can:orders.create')->only(['index', 'store', 'changeQty', 'delete', 'empty', 'categories']);
     }
 
     /**
@@ -34,6 +36,17 @@ class CartController extends Controller
         return view('cart.index');
     }
 
+    public function categories(): JsonResponse
+    {
+        $categories = Category::query()
+            ->where('status', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name', 'slug', 'sort_order']);
+
+        return response()->json(['data' => $categories]);
+    }
+
     /**
      * Add product to cart by barcode.
      */
@@ -41,13 +54,20 @@ class CartController extends Controller
     {
         $product = Product::where('barcode', $request->barcode)->first();
         $service = Service::where('barcode', $request->barcode)->first();
+        $deal = Deal::where('barcode', $request->barcode)->where('status', true)->first();
 
-        $item = $product ?? $service;
+        $item = $product ?? $service ?? $deal;
         if (! $item) {
             return response()->json(['message' => __('cart.not_found')], 404);
         }
 
-        $itemType = $item instanceof Service ? 1 : 0;
+        $itemType = 0;
+        if ($item instanceof Service) {
+            $itemType = 1;
+        } elseif ($item instanceof Deal) {
+            $itemType = 2;
+        }
+
         $cartItem = DB::table('user_cart')
             ->where('user_id', $request->user()->id)
             ->where('item_id', $item->id)
@@ -72,7 +92,11 @@ class CartController extends Controller
             return response()->json(['success' => true]);
         }
 
-        $product = $itemType === 1 ? Service::findOrFail($productId) : Product::findOrFail($productId);
+        $product = match ($itemType) {
+            1 => Service::findOrFail($productId),
+            2 => Deal::findOrFail($productId),
+            default => Product::findOrFail($productId),
+        };
         $cartItem = DB::table('user_cart')->where('user_id', $request->user()->id)->where('item_id', $productId)->where('item_type', $itemType)->first();
 
         if (!$cartItem) {
@@ -145,7 +169,14 @@ class CartController extends Controller
             ], 400);
         }
 
-        DB::table('user_cart')->insert(['user_id' => $request->user()->id, 'item_id' => $item->id, 'item_type' => $item instanceof Service ? 1 : 0, 'quantity' => 1]);
+        $itemType = 0;
+        if ($item instanceof Service) {
+            $itemType = 1;
+        } elseif ($item instanceof Deal) {
+            $itemType = 2;
+        }
+
+        DB::table('user_cart')->insert(['user_id' => $request->user()->id, 'item_id' => $item->id, 'item_type' => $itemType, 'quantity' => 1]);
 
         return response()->json(['success' => true]);
     }
@@ -154,7 +185,12 @@ class CartController extends Controller
     {
         if (str_contains($value, ':')) {
             [$type, $id] = explode(':', $value, 2);
-            return [is_numeric($id) ? (int) $id : null, $type === 'service' ? 1 : 0];
+            $itemType = match ($type) {
+                'service' => 1,
+                'deal' => 2,
+                default => 0,
+            };
+            return [is_numeric($id) ? (int) $id : null, $itemType];
         }
 
         return [is_numeric($value) ? (int) $value : null, 0];
@@ -163,9 +199,23 @@ class CartController extends Controller
     private function cartItems(int $userId): Collection
     {
         return DB::table('user_cart')->where('user_id', $userId)->get()->map(function ($row) {
-            $item = $row->item_type === 1 ? Service::find($row->item_id) : Product::find($row->item_id);
+            $item = null;
+            $typeStr = 'product';
+            if ((int) $row->item_type === 1) {
+                $item = Service::find($row->item_id);
+                $typeStr = 'service';
+            } elseif ((int) $row->item_type === 2) {
+                $item = Deal::find($row->item_id);
+                $typeStr = 'deal';
+            } else {
+                $item = Product::find($row->item_id);
+                $typeStr = 'product';
+            }
             if (! $item) return null;
-            $item->item_type = (int) $row->item_type === 1 ? 'service' : 'product';
+            $item->item_type = $typeStr;
+            if ($item instanceof Deal) {
+                $item->price = (float) $item->discounted_amount;
+            }
             $item->pivot = (object) ['quantity' => (int) $row->quantity, 'product_id' => $row->item_id, 'item_id' => $row->item_id];
             return $item;
         })->filter()->values();

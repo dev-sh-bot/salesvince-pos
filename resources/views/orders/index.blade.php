@@ -279,16 +279,19 @@
                 var itemsHTML = '';
                 if (items && Array.isArray(items) && items.length > 0) {
                     items.forEach(function(item, index) {
+                        var isDeal = Number(item.item_type) === 2 || item.item_type === 'deal';
                         var isService = Number(item.item_type) === 1 || item.item_type === 'service';
                         var product = item.product || {};
-                        var itemName = item.item_name || (isService ? 'Service' : (product.name || 'N/A'));
+                        var service = item.service || {};
+                        var deal = item.deal || {};
+                        var itemName = item.item_name || (isDeal ? (deal.name || 'Deal Package') : isService ? (service.name || 'Service') : (product.name || 'N/A'));
                         var quantity = item.quantity || 0;
                         var itemTotal = item.price || 0;
 
                         itemsHTML += '<tr>' +
                             '<td>' + (index + 1) + '</td>' +
                             '<td>' + itemName + '</td>' +
-                            '<td>' + (isService ? 'Service' : 'Product') + '</td>' +
+                            '<td>' + (isDeal ? 'Deal Package' : isService ? 'Service' : 'Product') + '</td>' +
                             '<td>' + currencySymbol + ' ' + (quantity ? (parseFloat(itemTotal / quantity)).toFixed(2) : '0.00') + '</td>' +
                             '<td>' + quantity + '</td>' +
                             '<td>' + currencySymbol + ' ' + parseFloat(itemTotal).toFixed(2) + '</td>' +

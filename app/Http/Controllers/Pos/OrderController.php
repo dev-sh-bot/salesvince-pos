@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pos;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderStoreRequest;
+use App\Models\Deal;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Service;
@@ -23,7 +24,9 @@ class OrderController extends Controller
     public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
         $orders = Order::query()
-            ->with(['items.product', 'payments', 'customer', 'branch', 'counter'])
+            ->with(['items' => function ($query): void {
+                $query->with(['product', 'service', 'deal']);
+            }, 'payments', 'customer', 'branch', 'counter'])
             ->when($request->input('start_date'), function ($query, $startDate): void {
                 $query->where('created_at', '>=', $startDate);
             })
@@ -95,14 +98,16 @@ class OrderController extends Controller
                     $srbInvoiceService->submit($order->load('customer'));
                 }
 
-                return $order;
+                return $order->refresh();
             });
 
             return response()->json([
                 'success' => true,
                 'message' => __('order.created_successfully'),
                 'order_id' => $order->id,
-                'order' => $order->load(['items.product', 'payments', 'customer', 'user', 'branch', 'counter']),
+                'order' => $order->load(['items' => function ($query): void {
+                    $query->with(['product', 'service', 'deal']);
+                }, 'payments', 'customer', 'user', 'branch', 'counter']),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -140,17 +145,26 @@ class OrderController extends Controller
      */
     private function createOrderItem(Order $order, $item, array $itemRates = []): void
     {
-        $itemType = $item instanceof \App\Models\Service ? 'service' : 'product';
+        $itemType = 'product';
+        $typeInt = 0;
+        if ($item instanceof Service) {
+            $itemType = 'service';
+            $typeInt = 1;
+        } elseif ($item instanceof Deal) {
+            $itemType = 'deal';
+            $typeInt = 2;
+        }
+
         $itemKey = $itemType . ':' . $item->id;
         $unitPrice = array_key_exists($itemKey, $itemRates)
             ? (float) $itemRates[$itemKey]
-            : (float) ($item->price ?? $item->rate ?? 0);
+            : (float) ($item->discounted_amount ?? $item->price ?? $item->rate ?? 0);
 
         $order->items()->create([
             'price' => $unitPrice * $item->pivot->quantity,
             'quantity' => $item->pivot->quantity,
-            'product_id' => $item->id,
-            'item_type' => $item instanceof \App\Models\Service ? 1 : 0,
+            'item_id' => $item->id,
+            'item_type' => $typeInt,
             'item_name' => $item->name,
         ]);
     }
@@ -158,7 +172,11 @@ class OrderController extends Controller
     private function cartItems(int $userId): \Illuminate\Support\Collection
     {
         return DB::table('user_cart')->where('user_id', $userId)->get()->map(function ($row) {
-            $item = (int) $row->item_type === 1 ? Service::find($row->item_id) : Product::find($row->item_id);
+            $item = match ((int) $row->item_type) {
+                1 => Service::find($row->item_id),
+                2 => Deal::find($row->item_id),
+                default => Product::find($row->item_id),
+            };
             if (! $item) return null;
             $item->item_type = (int) $row->item_type;
             $item->pivot = (object) ['quantity' => (int) $row->quantity];

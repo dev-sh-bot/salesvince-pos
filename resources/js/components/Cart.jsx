@@ -253,11 +253,16 @@ class Cart extends Component {
             cart: [],
             products: [],
             services: [],
+            categories: [],
+            deals: [],
+            catalogMode: "services",
             catalog: [],
             customers: [],
             barcode: "",
             search: "",
+            isSearching: false,
             activeFilter: "all",
+            activeCategory: "all",
             taxPercent: window.APP?.tax_enabled ? "8" : "",
             taxAmount: "",
             taxMode: "percent",
@@ -298,6 +303,12 @@ class Cart extends Component {
         this.showReceipt = this.showReceipt.bind(this);
         this.printReceipt = this.printReceipt.bind(this);
         this.addProductToCart = this.addProductToCart.bind(this);
+        this.formatAmount = this.formatAmount.bind(this);
+    }
+
+    formatAmount(value) {
+        const amount = Number(value) || 0;
+        return amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     componentDidMount() {
@@ -1039,25 +1050,52 @@ class Cart extends Component {
     }
 
     loadCatalog(search = "") {
-        const query = search ? `?search=${encodeURIComponent(search)}` : "";
+        this.setState({ isSearching: true });
+        const query = search ? `search=${encodeURIComponent(search)}` : "";
         const showProducts = !!(window.APP?.show_products !== false);
         const showServices = !!window.APP?.show_services;
 
         const productRequest = showProducts
-            ? axios.get(`/admin/products${query}`, { headers: { Accept: "application/json" } })
+            ? axios.get(`/admin/products${query ? `?${query}` : ""}`, { headers: { Accept: "application/json" } })
             : Promise.resolve({ data: { data: [] } });
 
+        const serviceQuery = [query, "all=1"].filter(Boolean).join("&");
         const serviceRequest = showServices
-            ? axios.get(`/admin/services${query}`, { headers: { Accept: "application/json" } })
+            ? axios.get(`/admin/services?${serviceQuery}`, { headers: { Accept: "application/json" } })
             : Promise.resolve({ data: { data: [] } });
 
-        Promise.all([productRequest, serviceRequest])
-            .then(([productRes, serviceRes]) => {
+        const categoryRequest = showServices
+            ? axios.get("/admin/cart/categories", { headers: { Accept: "application/json" } })
+            : Promise.resolve({ data: { data: [] } });
+
+        const dealQuery = [query, "all=1", "status=1"].filter(Boolean).join("&");
+        const dealRequest = axios.get(`/admin/deals?${dealQuery}`, { headers: { Accept: "application/json" } })
+            .catch(() => ({ data: { data: [] } }));
+
+        Promise.all([productRequest, serviceRequest, categoryRequest, dealRequest])
+            .then(([productRes, serviceRes, categoryRes, dealRes]) => {
                 const products = Array.isArray(productRes.data.data) ? productRes.data.data.map(item => ({ ...item, item_type: 'product' })) : [];
-                const services = Array.isArray(serviceRes.data.data) ? serviceRes.data.data.map(item => ({ ...item, item_type: 'service', price: Number(item.rate ?? item.price ?? 0), quantity: Number.POSITIVE_INFINITY })) : [];
-                this.setState({ products, services, catalog: [...products, ...services] });
+                const services = Array.isArray(serviceRes.data.data) ? serviceRes.data.data.map(item => ({
+                    ...item,
+                    item_type: 'service',
+                    category_id: item.category_id ?? item.category?.id ?? null,
+                    category_name: item.category?.name || item.category_name || "Uncategorized",
+                    price: Number(item.rate ?? item.price ?? 0),
+                    quantity: Number.POSITIVE_INFINITY,
+                })) : [];
+                const categories = Array.isArray(categoryRes.data.data) ? categoryRes.data.data : [];
+                const deals = Array.isArray(dealRes?.data?.data) ? dealRes.data.data.map(item => ({
+                    ...item,
+                    item_type: 'deal',
+                    price: Number(item.discounted_amount ?? 0),
+                    original_price: Number(item.original_amount ?? 0),
+                    discount_percentage: Number(item.discount_percentage ?? 0),
+                    quantity: Number.POSITIVE_INFINITY,
+                    services: Array.isArray(item.services) ? item.services : [],
+                })) : [];
+                this.setState({ products, services, categories, deals, catalog: [...products, ...services, ...deals], isSearching: false });
             })
-            .catch(() => this.setState({ products: [], services: [], catalog: [] }));
+            .catch(() => this.setState({ products: [], services: [], categories: [], deals: [], catalog: [], isSearching: false }));
     }
 
     loadCart() {
@@ -1071,6 +1109,12 @@ class Cart extends Component {
         try {
             savedCart = JSON.parse(window.localStorage.getItem("pos_cart") || "[]");
             if (!Array.isArray(savedCart)) savedCart = [];
+            savedCart = savedCart.map(item => ({
+                ...item,
+                quantity: item.item_type === "service" || item.item_type === "deal" || Number(item.item_type) === 1 || Number(item.item_type) === 2
+                    ? Number.POSITIVE_INFINITY
+                    : item.quantity,
+            }));
         } catch (error) {
             savedCart = [];
         }
@@ -1137,7 +1181,7 @@ class Cart extends Component {
     }
 
     getTotal(cart) {
-        return sum(cart.map(c => c.pivot.quantity * Number(c.price ?? c.rate ?? 0))).toFixed(2);
+        return sum(cart.map(c => c.pivot.quantity * Number(c.price ?? c.discounted_amount ?? c.rate ?? 0))).toFixed(2);
     }
 
     getSaleTotals(cart = this.state.cart) {
@@ -1205,17 +1249,21 @@ class Cart extends Component {
     }
 
     handleChangeSearch(e) {
-        this.setState({ search: e.target.value });
+        this.setState({ search: e.target.value, isSearching: true });
         clearTimeout(this._searchTimer);
         this._searchTimer = setTimeout(() => this.loadProducts(e.target.value), 350);
     }
 
     handleSeach(e) {
         if (e.keyCode === 13) { clearTimeout(this._searchTimer); this.loadProducts(e.target.value); }
+        else if (e.keyCode === 27) {
+            clearTimeout(this._searchTimer);
+            this.setState({ search: "" }, () => this.loadProducts(""));
+        }
     }
 
     addProductToCart(barcode) {
-        const catalogItem = [...this.state.products, ...this.state.services].find(item => item.barcode === barcode);
+        const catalogItem = [...this.state.products, ...this.state.services, ...this.state.deals].find(item => item.barcode === barcode);
         if (!catalogItem) return;
 
         const itemType = catalogItem.item_type || "product";
@@ -1236,7 +1284,7 @@ class Cart extends Component {
             }
             const newItem = {
                 ...catalogItem,
-                price: Number(catalogItem.price ?? catalogItem.rate ?? 0),
+                price: Number(catalogItem.price ?? catalogItem.discounted_amount ?? catalogItem.rate ?? 0),
                 quantity: itemType === "product" ? Number(catalogItem.quantity ?? 0) : Number.POSITIVE_INFINITY,
                 pivot: { quantity: 1, product_id: catalogItem.id, user_id: 1 }
             };
@@ -1250,11 +1298,22 @@ class Cart extends Component {
     setCustomerId(e) { this.setState({ customer_id: e.target.value }); }
 
     handleClickSubmit() {
-        const { translations, cart, customer_id } = this.state;
+        const { translations, cart, customer_id, customers, activeBranch } = this.state;
+        if (!cart || cart.length === 0) {
+            Swal.fire({
+                icon: "warning",
+                title: translations["cart_empty"] || "Cart is Empty",
+                text: "Please add products, services, or deals to the cart before placing an order.",
+                confirmButtonColor: "var(--snd-primary)"
+            });
+            return;
+        }
+
         const saleTotals = this.getSaleTotals(cart);
         const total = saleTotals.total.toFixed(2);
+        const currency = window.APP?.currency_symbol || "PKR";
         const itemRates = cart.reduce((rates, item) => {
-            rates[this.getCartItemKey(item)] = Number(item.price ?? item.rate ?? 0);
+            rates[this.getCartItemKey(item)] = Number(item.price ?? item.discounted_amount ?? item.rate ?? 0);
             return rates;
         }, {});
         const orderPayload = {
@@ -1266,24 +1325,297 @@ class Cart extends Component {
             discount_percent: saleTotals.discountPercent,
             discount_amount: saleTotals.discountAmount,
         };
+
+        const selectedCust = (customers || []).find(c => String(c.id) === String(customer_id));
+        const customerName = selectedCust
+            ? [selectedCust.first_name, selectedCust.last_name].filter(Boolean).join(" ")
+            : "Walk-in Customer";
+        const customerPhone = selectedCust?.phone ? selectedCust.phone : "";
+        const totalQty = cart.reduce((sum, item) => sum + Number(item.pivot?.quantity || 0), 0);
+
+        const itemsRowsHtml = cart.map(item => {
+            const unitPrice = Number(item.price ?? item.discounted_amount ?? item.rate ?? 0);
+            const qty = Number(item.pivot?.quantity || 0);
+            const lineTotal = unitPrice * qty;
+            const isDeal = item.item_type === 'deal' || item.item_type === 2;
+            const isService = item.item_type === 'service' || item.item_type === 1;
+            const typeBadge = isDeal
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:5px;font-size:0.67rem;font-weight:700;background:var(--snd-primary-soft);color:var(--snd-primary);border:1px solid var(--snd-border-strong);"><i class="fas fa-tags" style="font-size:0.62rem;"></i> Deal</span>`
+                : isService
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:5px;font-size:0.67rem;font-weight:700;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;"><i class="fas fa-spa" style="font-size:0.62rem;"></i> Service</span>`
+                : `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:5px;font-size:0.67rem;font-weight:700;background:#f8fafc;color:#475569;border:1px solid #e2e8f0;"><i class="fas fa-box-open" style="font-size:0.62rem;"></i> Product</span>`;
+
+            return `
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 6px; text-align: left; vertical-align: middle;">
+                        <div style="font-weight: 700; color: #1e293b; font-size: 0.84rem; line-height: 1.3;">${item.name}</div>
+                        <div style="margin-top: 3px;">${typeBadge}</div>
+                    </td>
+                    <td style="padding: 8px 6px; text-align: center; vertical-align: middle; font-weight: 700; color: #334155; font-size: 0.84rem;">
+                        ${qty}
+                    </td>
+                    <td style="padding: 8px 6px; text-align: right; vertical-align: middle; color: #64748b; font-size: 0.82rem; font-family: monospace;">
+                        ${this.formatAmount(unitPrice)}
+                    </td>
+                    <td style="padding: 8px 6px; text-align: right; vertical-align: middle; font-weight: 800; color: #0f172a; font-size: 0.85rem; font-family: monospace;">
+                        ${this.formatAmount(lineTotal)}
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        const modalHtml = `
+            <div style="text-align: left; font-family: inherit; color: #1e293b;">
+                <!-- Header Card -->
+                <div style="display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1.5px solid #e2e8f0; margin-bottom: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--snd-primary) 0%, var(--snd-primary-deep) 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; box-shadow: 0 4px 12px rgba(151, 134, 238, 0.25); flex-shrink: 0;">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div style="min-width: 0; flex: 1;">
+                        <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; line-height: 1.2;">
+                            Order Confirmation & Payment
+                        </div>
+                        <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">
+                            Review purchase details below. Only Received Amount is editable.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer & Summary Details Pill -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; margin-bottom: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.78rem;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span style="color: #64748b; font-weight: 600;"><i class="fas fa-user-circle" style="color: var(--snd-primary);"></i> Customer:</span>
+                        <strong style="color: #0f172a;">${customerName}</strong>
+                        ${customerPhone ? `<span style="color: #64748b; font-size: 0.72rem;">(${customerPhone})</span>` : ""}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="background: var(--snd-primary-soft); color: var(--snd-primary); border: 1px solid var(--snd-border-strong); padding: 2px 7px; border-radius: 6px; font-weight: 700; font-size: 0.72rem;">
+                            ${totalQty} Total Items
+                        </span>
+                        ${activeBranch ? `<span style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 6px; font-weight: 600; font-size: 0.72rem;">${activeBranch.name}</span>` : ""}
+                    </div>
+                </div>
+
+                <!-- Selected Items List (Scrollable Table) -->
+                <div style="border: 1.5px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; background: #fff;">
+                    <div style="background: #f1f5f9; padding: 6px 8px; border-bottom: 1px solid #e2e8f0; font-size: 0.72rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">
+                        Selected Services & Deals (View-Only)
+                    </div>
+                    <div style="max-height: 170px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                            <thead>
+                                <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 0.72rem; color: #64748b; text-transform: uppercase;">
+                                    <th style="padding: 6px 8px; text-align: left; font-weight: 700;">Item</th>
+                                    <th style="padding: 6px 8px; text-align: center; font-weight: 700; width: 45px;">Qty</th>
+                                    <th style="padding: 6px 8px; text-align: right; font-weight: 700; width: 75px;">Rate</th>
+                                    <th style="padding: 6px 8px; text-align: right; font-weight: 700; width: 85px;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsRowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Order Totals Breakdown -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: #64748b; margin-bottom: 5px;">
+                        <span>Subtotal</span>
+                        <strong style="color: #1e293b; font-family: monospace;">${currency} ${this.formatAmount(saleTotals.subtotal)}</strong>
+                    </div>
+                    ${saleTotals.discountAmount > 0 ? `
+                        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: #059669; margin-bottom: 5px;">
+                            <span>Discount ${saleTotals.discountPercent ? `(${saleTotals.discountPercent}%)` : ''}</span>
+                            <strong style="font-family: monospace;">-${currency} ${this.formatAmount(saleTotals.discountAmount)}</strong>
+                        </div>
+                    ` : ""}
+                    ${saleTotals.taxAmount > 0 ? `
+                        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--snd-primary); margin-bottom: 5px;">
+                            <span>Sales Tax ${saleTotals.taxPercent ? `(${saleTotals.taxPercent}%)` : ''}</span>
+                            <strong style="font-family: monospace;">+${currency} ${this.formatAmount(saleTotals.taxAmount)}</strong>
+                        </div>
+                    ` : ""}
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1.5px dashed #cbd5e1; margin-top: 6px;">
+                        <span style="font-size: 0.95rem; font-weight: 800; color: #0f172a;">Payable Total</span>
+                        <span style="font-size: 1.15rem; font-weight: 900; color: var(--snd-primary); font-family: monospace;">${currency} ${this.formatAmount(saleTotals.total)}</span>
+                    </div>
+                </div>
+
+                <!-- Editable Cash Received Input Box -->
+                <div style="background: #ffffff; border: 2px solid var(--snd-primary); border-radius: 12px; padding: 12px 14px; box-shadow: 0 4px 14px rgba(151, 134, 238, 0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label for="swal-received-amount" style="font-weight: 800; font-size: 0.85rem; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 5px;">
+                            <i class="fas fa-hand-holding-usd" style="color: var(--snd-primary); font-size: 0.95rem;"></i>
+                            Received Amount <span style="font-size: 0.72rem; color: var(--snd-primary); font-weight: 700; background: var(--snd-primary-soft); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--snd-border-strong);">EDITABLE</span>
+                        </label>
+                        <span style="font-size: 0.74rem; font-weight: 700; color: #64748b;">
+                            Due: <b style="color: #0f172a;">${currency} ${total}</b>
+                        </span>
+                    </div>
+
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <span style="position: absolute; left: 12px; font-weight: 800; color: #64748b; font-size: 1rem; pointer-events: none;">${currency}</span>
+                        <input
+                            id="swal-received-amount"
+                            type="number"
+                            step="0.01"
+                            min="${total}"
+                            value="${total}"
+                            style="width: 100%; box-sizing: border-box; padding: 9px 12px 9px 48px; font-size: 1.2rem; font-weight: 800; color: #0f172a; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; transition: border-color 0.2s;"
+                            autocomplete="off"
+                        />
+                    </div>
+
+                    <!-- Quick Preset Buttons -->
+                    <div style="display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;">
+                        <button type="button" id="swal-btn-exact" style="flex: 1; min-width: 80px; padding: 5px 8px; border: 1px solid var(--snd-border-strong); background: var(--snd-primary-soft); color: var(--snd-primary-deep); border-radius: 6px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
+                            Exact (${total})
+                        </button>
+                        <button type="button" class="swal-preset-btn" data-add="500" style="padding: 5px 9px; border: 1px solid #e2e8f0; background: #ffffff; color: #334155; border-radius: 6px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
+                            +500
+                        </button>
+                        <button type="button" class="swal-preset-btn" data-add="1000" style="padding: 5px 9px; border: 1px solid #e2e8f0; background: #ffffff; color: #334155; border-radius: 6px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
+                            +1000
+                        </button>
+                        <button type="button" class="swal-preset-btn" data-add="5000" style="padding: 5px 9px; border: 1px solid #e2e8f0; background: #ffffff; color: #334155; border-radius: 6px; font-size: 0.73rem; font-weight: 700; cursor: pointer;">
+                            +5000
+                        </button>
+                    </div>
+
+                    <!-- Change / Short Amount Live Calculation -->
+                    <div id="swal-change-box" style="margin-top: 9px; padding: 7px 10px; border-radius: 7px; background: #f0fdf4; border: 1px solid #bbf7d0; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #166534;" id="swal-change-label">Change Due:</span>
+                        <span style="font-size: 0.95rem; font-weight: 800; color: #15803d; font-family: monospace;" id="swal-change-val">${currency} 0.00</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
         Swal.fire({
-            title: translations["received_amount"] || "Received Amount",
-            input: "number", inputValue: total,
-            inputAttributes: { min: total, step: "0.01" },
-            inputLabel: `Total: ${window.APP.currency_symbol}${total}`,
-            cancelButtonText: translations["cancel_pay"] || "Cancel",
+            html: modalHtml,
+            width: 550,
             showCancelButton: true,
-            confirmButtonText: translations["confirm_pay"] || "Confirm",
-            confirmButtonColor: "#2a69b0",
+            confirmButtonText: '<i class="fas fa-check-circle" style="margin-right: 6px;"></i> Confirm & Place Order',
+            confirmButtonColor: "var(--snd-primary)",
+            cancelButtonText: "Cancel",
+            cancelButtonColor: "#64748b",
+            focusConfirm: false,
             showLoaderOnConfirm: true,
-            preConfirm: amount =>
-                axios.post("/admin/orders", { ...orderPayload, amount })
-                    .then(res => { this.resetSaleAdjustments(); return res.data; })
-                    .catch(err => Swal.showValidationMessage(err.response?.data?.message || "Error")),
             allowOutsideClick: () => !Swal.isLoading(),
+            didOpen: () => {
+                const inputEl = document.getElementById("swal-received-amount");
+                const changeBox = document.getElementById("swal-change-box");
+                const changeLabel = document.getElementById("swal-change-label");
+                const changeVal = document.getElementById("swal-change-val");
+                const targetTotal = Number(total);
+
+                const updateChange = () => {
+                    if (!inputEl || !changeBox || !changeLabel || !changeVal) return;
+                    const val = Number(inputEl.value) || 0;
+                    const diff = val - targetTotal;
+                    if (diff >= -0.001) {
+                        changeBox.style.background = "#f0fdf4";
+                        changeBox.style.borderColor = "#bbf7d0";
+                        changeLabel.style.color = "#166534";
+                        changeLabel.textContent = "Change Due:";
+                        changeVal.style.color = "#15803d";
+                        changeVal.textContent = `${currency} ${diff > 0 ? diff.toFixed(2) : "0.00"}`;
+                    } else {
+                        changeBox.style.background = "#fef2f2";
+                        changeBox.style.borderColor = "#fecaca";
+                        changeLabel.style.color = "#991b1b";
+                        changeLabel.textContent = "Remaining Due:";
+                        changeVal.style.color = "#dc2626";
+                        changeVal.textContent = `${currency} ${Math.abs(diff).toFixed(2)}`;
+                    }
+                };
+
+                if (inputEl) {
+                    inputEl.addEventListener("input", updateChange);
+                    inputEl.addEventListener("focus", () => {
+                        inputEl.style.background = "#ffffff";
+                        inputEl.style.borderColor = "var(--snd-primary)";
+                    });
+                    inputEl.addEventListener("blur", () => {
+                        inputEl.style.background = "#f8fafc";
+                    });
+                    setTimeout(() => {
+                        inputEl.focus();
+                        inputEl.select();
+                    }, 50);
+                }
+
+                const exactBtn = document.getElementById("swal-btn-exact");
+                if (exactBtn && inputEl) {
+                    exactBtn.addEventListener("click", () => {
+                        inputEl.value = targetTotal.toFixed(2);
+                        updateChange();
+                        inputEl.focus();
+                    });
+                }
+
+                document.querySelectorAll(".swal-preset-btn").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        if (!inputEl) return;
+                        const add = Number(btn.getAttribute("data-add")) || 0;
+                        const current = Number(inputEl.value) || targetTotal;
+                        inputEl.value = (current + add).toFixed(2);
+                        updateChange();
+                        inputEl.focus();
+                    });
+                });
+            },
+            preConfirm: () => {
+                const inputEl = document.getElementById("swal-received-amount");
+                const amount = inputEl ? inputEl.value : total;
+                const numAmount = Number(amount);
+                if (isNaN(numAmount) || numAmount < Number(total)) {
+                    Swal.showValidationMessage(`Received amount must be at least ${currency} ${total}`);
+                    return false;
+                }
+                return axios.post("/admin/orders", { ...orderPayload, amount: numAmount.toFixed(2) })
+                    .then(res => {
+                        this.resetSaleAdjustments();
+                        this.loadCart();
+                        if (res.data?.order) {
+                            this.setState({ lastPlacedOrder: res.data.order });
+                        }
+                        return res.data;
+                    })
+                    .catch(err => {
+                        Swal.showValidationMessage(err.response?.data?.message || "Error creating order");
+                        return false;
+                    });
+            },
+            didClose: () => {
+                setTimeout(() => {
+                    document.querySelectorAll(".swal2-container").forEach(el => el.remove());
+                    document.body.classList.remove("swal2-shown", "swal2-height-auto");
+                    document.body.style.overflow = "";
+                    document.querySelectorAll("[aria-hidden='true']").forEach(el => el.removeAttribute("aria-hidden"));
+                    window.focus();
+                }, 100);
+            }
         }).then(result => {
-            if (result.value?.order) this.showReceipt(result.value.order);
+            if (result.isConfirmed && result.value?.order) {
+                this.showReceipt(result.value.order);
+            }
         });
+    }
+
+    handleOpenLastInvoice() {
+        if (this.state.lastPlacedOrder) {
+            this.showReceipt(this.state.lastPlacedOrder);
+        } else {
+            Swal.fire({
+                icon: "info",
+                title: "No Recent Invoice",
+                text: "Please place an order first to view its invoice.",
+                confirmButtonColor: "var(--snd-primary)",
+                timer: 2500,
+            });
+        }
     }
 
 buildSrbBarcodeSvg(reference = "SRB-000000") {
@@ -1338,58 +1670,64 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
     }
 
     showReceipt(order) {
+        if (!order) return;
         const currency = window.APP.currency_symbol || "";
         const customerName = order.customer
-            ? `${order.customer.first_name} ${order.customer.last_name}`
+            ? `${order.customer.first_name || ""} ${order.customer.last_name || ""}`.trim() || order.customer.name || "Walk-in Customer"
             : "Walk-in Customer";
-        const createdAt = new Date(order.created_at).toLocaleString();
+        const createdAtObj = order.created_at ? new Date(order.created_at) : new Date();
+        const invoiceDate = createdAtObj.toLocaleDateString('en-US');
+        const invoiceTime = createdAtObj.toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+        }) + ' PST';
+        const createdAt = `${invoiceDate}, ${invoiceTime}`;
         const branchName = order.branch?.name || "Main Branch";
         const counterName = order.counter?.name || "Counter 1";
-        const invoiceNo = order.invoice_no || `POS-${String(order.id).padStart(4, "0")}`;
-        const invoiceTitleNo = `Order ID-${String(order.id).padStart(4, "0")}`;
-
+        const invoiceNo = order.invoice_no || `POS-${String(order.id).padStart(3, "0")}`;
         const headerHTML = CommonHelper.getReceiptHeaderHTML({
             branchName: branchName,
             branchAddress: order.branch?.address,
-            branchPhone: order.branch?.phone, // agar field exist karti hai to hi dikhega
+            branchPhone: order.branch?.phone,
         });
         const footerHTML = CommonHelper.getReceiptFooterHTML(createdAt);
 
         const items = (order.items || []).map(item => {
             const quantity = Number(item.quantity || 0);
             const lineTotal = Number(item.price || 0);
-            const unitPrice = quantity ? lineTotal / quantity : lineTotal;
-            const name = item.item_name || (Number(item.item_type) === 1 ? "Service" : item.product?.name || "Product");
+            const unitPrice = quantity > 0 ? (lineTotal / quantity) : lineTotal;
+            const name = item.item_name || (Number(item.item_type) === 2 ? (item.deal?.name || "Deal Package") : Number(item.item_type) === 1 ? (item.service?.name || "Service") : (item.product?.name || "Product"));
 
             return `<div class="receipt-item-block">
                 <div class="receipt-item-name">${name}</div>
-                <div class="receipt-item-row"><span class="col-item"></span><span class="col-qty">${quantity}</span><span class="col-price">${unitPrice.toFixed(2)}</span><span class="col-total">${lineTotal.toFixed(2)}</span></div>
+                <div class="receipt-item-row">
+                    <span class="col-item"></span>
+                    <span class="col-qty">${quantity}</span>
+                    <span class="col-price">${unitPrice.toFixed(2)}</span>
+                    <span class="col-total">${lineTotal.toFixed(2)}</span>
+                </div>
             </div>`;
         }).join("");
 
-        const subtotal = Number(order.subtotal ?? (order.items || []).reduce((s, i) => s + Number(i.price), 0));
+        const subtotal = Number(order.subtotal ?? (order.items || []).reduce((s, i) => s + Number(i.price || 0), 0));
         const taxPercent = Number(order.tax_percent || 0);
         const taxAmount = Number(order.tax_amount || 0);
         const discountPercent = Number(order.discount_percent || 0);
         const discountAmount = Number(order.discount_amount || 0);
-        const total = Number(order.total_amount ?? (subtotal + taxAmount - discountAmount));
-        const received = (order.payments || []).reduce((s, p) => s + Number(p.amount), 0);
+        const total = Number(order.total_amount ?? Math.max(0, subtotal + taxAmount - discountAmount));
+        const received = (order.payments || []).reduce((s, p) => s + Number(p.amount || 0), 0);
         const changeDue = received > total ? received - total : 0;
-        const valueForSales = subtotal - discountAmount;
+        const valueForSales = Math.max(0, subtotal - discountAmount);
 
-        // Payment status: purely descriptive of the POS flow (cash collected at order time),
-        // not a fabricated field — omits itself if no payment recorded.
-        const paymentStatus = received > 0 ? "PAID (CASH)" : null;
-        // Sales By: only shown if your order actually carries this — no fake name inserted.
-        const salesByName = order.user?.name || order.cashier?.name || null;
+        const paymentStatus = received > 0 ? "PAID (CASH)" : "UNPAID";
+        const salesByName = order.user?.name || (window.APP && window.APP.user_name) || null;
 
         const barcodeSvg = this.buildSrbBarcodeSvg(invoiceNo);
 
         const metaRows = [
             { label: "Receipt No.", value: invoiceNo },
-            // { label: "Order ID", value: `#${order.id}` },
             paymentStatus ? { label: "Payment Status", value: paymentStatus } : null,
-            { label: "Date", value: createdAt },
+            { label: "Invoice Date", value: invoiceDate },
+            { label: "Time", value: invoiceTime },
             salesByName ? { label: "Sales By", value: salesByName } : null,
             { label: "Terminal", value: counterName },
             { label: "Customer", value: customerName },
@@ -1606,7 +1944,7 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
     // ''‚''‚¬ Main render ''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚''‚¬
 
     render() {
-        const { cart, products, services, customers, customer_id, barcode, translations,
+        const { cart, products, services, categories, deals, catalogMode, isSearching, customers, customer_id, barcode, translations,
             gateChecked, branchVerified, counterVerified,
             activeBranch, activeCounter, search } = this.state;
 
@@ -1619,15 +1957,31 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
         const catalogItems = [...products, ...services];
         const showProducts = !!(window.APP?.show_products !== false);
         const showServices = !!window.APP?.show_services;
+        const derivedCategories = categories.length
+            ? categories
+            : Array.from(new Map(services.filter(item => item.category_id).map(item => [item.category_id, { id: item.category_id, name: item.category_name }])).values());
+        const activeCategory = this.state.activeCategory || "all";
         const filterOptions = [
-            { key: "all", label: "All Items" },
+            { key: "all", label: "All" },
             ...(showProducts ? [{ key: "product", label: "Products" }] : []),
-            ...(showServices ? [{ key: "service", label: "Services" }] : []),
+            ...(showServices ? derivedCategories.map(category => ({ key: `category:${category.id}`, label: category.name })) : []),
         ];
-        const activeFilter = this.state.activeFilter || "all";
         const filteredCatalog = catalogItems.filter(item => {
-            if (activeFilter === "all") return true;
-            return (item.item_type || "product") === activeFilter;
+            if (activeCategory === "all") return true;
+            if (activeCategory === "product") return (item.item_type || "product") === "product";
+            if (String(activeCategory).startsWith("category:")) {
+                const categoryId = Number(String(activeCategory).split(":")[1]);
+                return item.item_type === "service" && Number(item.category_id) === categoryId;
+            }
+            if (activeCategory === "uncategorized") return item.item_type === "service" && !item.category_id;
+            return true;
+        });
+        const filteredDeals = (deals || []).filter(deal => {
+            if (!search) return true;
+            const term = search.toLowerCase();
+            return String(deal.name || "").toLowerCase().includes(term)
+                || String(deal.barcode || "").toLowerCase().includes(term)
+                || (deal.services || []).some(service => String(service.name || "").toLowerCase().includes(term));
         });
 
         // Not yet checked session status
@@ -1653,30 +2007,84 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                     <div className="pos-layout">
                         <div className="pos-catalog">
                             <div className="pos-catalog-toolbar">
-                                <div className="pos-catalog-title">Menu Categories</div>
+                                <div className="pos-catalog-switch" role="tablist" aria-label="POS catalog">
+                                    <button type="button" role="tab" aria-selected={catalogMode !== "deals"} onClick={() => this.setState({ catalogMode: "services" })} className={`pos-catalog-tab ${catalogMode !== "deals" ? "is-active" : ""}`}>
+                                        <SndIcon name="tags" /> Services <span>{services.length}</span>
+                                    </button>
+                                    <button type="button" role="tab" aria-selected={catalogMode === "deals"} onClick={() => this.setState({ catalogMode: "deals" })} className={`pos-catalog-tab ${catalogMode === "deals" ? "is-active" : ""}`}>
+                                        <SndIcon name="percent" /> Deals <span>{deals.length}</span>
+                                    </button>
+                                </div>
                                 <label className="pos-search-control">
-                                    <input type="text" value={search || ""} placeholder="Search..." onChange={this.handleChangeSearch} onKeyDown={this.handleSeach} />
-                                    <SndIcon name="search" />
+                                    <input type="text" value={search || ""} placeholder={catalogMode === "deals" ? "Search deals or barcode..." : "Search products or barcode..."} onChange={this.handleChangeSearch} onKeyDown={this.handleSeach} />
+                                    <SndIcon name={isSearching ? "loader-circle" : "search"} className={isSearching ? "fa-spin" : ""} />
+                                    {search && <button type="button" className="pos-search-clear" aria-label="Clear search" onClick={() => { clearTimeout(this._searchTimer); this.setState({ search: "" }, () => this.loadProducts("")); }}><SndIcon name="x" /></button>}
                                 </label>
                             </div>
 
-                            <div className="pos-filter-row">
+                            {catalogMode !== "deals" && <div className="pos-filter-row">
                                 {filterOptions.map((cat) => (
-                                    <button key={cat.key} type="button" onClick={() => this.setState({ activeFilter: cat.key })} className={`pos-filter-chip ${activeFilter === cat.key ? "is-active" : ""}`}>
+                                    <button key={cat.key} type="button" onClick={() => this.setState({ activeCategory: cat.key })} className={`pos-filter-chip ${activeCategory === cat.key ? "is-active" : ""}`}>
                                         {cat.label}
                                     </button>
                                 ))}
-                            </div>
+                                {showServices && services.some(item => !item.category_id) && (
+                                    <button type="button" onClick={() => this.setState({ activeCategory: "uncategorized" })} className={`pos-filter-chip ${activeCategory === "uncategorized" ? "is-active" : ""}`}>Uncategorized</button>
+                                )}
+                            </div>}
 
                             <div className="pos-product-grid">
-                                {dashboardCards.length === 0 ? (
-                                    <div className="pos-empty-state">No items found</div>
+                                {catalogMode === "deals" ? (filteredDeals.length === 0 ? (
+                                    <div className="pos-empty-state">{isSearching ? "Searching deals..." : "No deal packages found"}</div>
+                                ) : filteredDeals.map(deal => {
+                                    const dealPrice = Number(deal.discounted_amount ?? deal.price ?? 0);
+                                    const originalPrice = Number(deal.original_amount ?? deal.original_price ?? 0);
+                                    const savings = Math.max(0, originalPrice - dealPrice);
+                                    const itemKey = `deal:${deal.id}`;
+                                    const cartItem = cart.find(item => this.getCartItemKey(item) === itemKey);
+                                    const inCartQty = Number(cartItem?.pivot?.quantity || 0);
+                                    const includedServices = Array.isArray(deal.services) ? deal.services : [];
+                                    return (
+                                        <article key={itemKey} className={`pos-deal-card ${inCartQty ? "is-in-cart" : ""}`}>
+                                            <div className="pos-deal-heading">
+                                                <span className="pos-deal-badge"><SndIcon name="tags" /> Deal Package</span>
+                                                {Number(deal.discount_percentage) > 0 && <span className="pos-deal-discount">{Number(deal.discount_percentage).toFixed(0)}% off</span>}
+                                            </div>
+                                            <div className="pos-deal-body">
+                                                <h3 className="pos-deal-name">{deal.name}</h3>
+                                                {deal.description && <p className="pos-deal-description">{deal.description}</p>}
+                                                <div className="pos-deal-services-title">Included Services ({includedServices.length})</div>
+                                                <ul className="pos-deal-services">
+                                                    {includedServices.length ? includedServices.map(service => <li key={service.id}><SndIcon name="circle-check" />{service.name}</li>) : <li className="is-empty">No services specified</li>}
+                                                </ul>
+                                                {deal.barcode && <code className="pos-deal-barcode">{deal.barcode}</code>}
+                                            </div>
+                                            <div className="pos-deal-footer">
+                                                <div className="pos-deal-pricing">
+                                                    {originalPrice > dealPrice && <del>{currency}{originalPrice.toFixed(2)}</del>}
+                                                    <strong>{currency}{dealPrice.toFixed(2)}</strong>
+                                                    {savings > 0 && <small>Save {currency}{savings.toFixed(2)}</small>}
+                                                </div>
+                                                {inCartQty ? (
+                                                    <div className="pos-deal-qty" aria-label={`${inCartQty} in cart`}>
+                                                        <button type="button" aria-label="Decrease deal quantity" onClick={() => inCartQty > 1 ? this.handleChangeQty(itemKey, inCartQty - 1) : this.handleClickDelete(itemKey)}>-</button>
+                                                        <span>{inCartQty}</span>
+                                                        <button type="button" aria-label="Increase deal quantity" onClick={() => this.addProductToCart(deal.barcode)}>+</button>
+                                                    </div>
+                                                ) : <button type="button" className="pos-deal-add" onClick={() => this.addProductToCart(deal.barcode)}><SndIcon name="plus" /> Add Deal</button>}
+                                            </div>
+                                        </article>
+                                    );
+                                })) : dashboardCards.length === 0 ? (
+                                    <div className="pos-empty-state">{isSearching ? "Searching catalog..." : search ? `No results found for “${search}”` : "No items found"}</div>
                                 ) : (
                                     dashboardCards.map((item, idx) => {
                                         const displayPrice = Number(item.price ?? item.rate ?? 0);
                                         const productLabel = item.item_type === 'service' ? 'Service' : 'Menu';
+                                        const itemKey = `${item.item_type || 'product'}:${item.id}`;
+                                        const inCartQty = Number(cart.find(cartItem => this.getCartItemKey(cartItem) === itemKey)?.pivot?.quantity || 0);
                                         return (
-                                            <div key={`${item.item_type || 'product'}:${item.id}`} onClick={() => this.addProductToCart(item.barcode)} className="pos-product-card">
+                                            <div key={itemKey} onClick={() => this.addProductToCart(item.barcode)} className={`pos-product-card ${inCartQty ? "is-in-cart" : ""}`}>
                                                 <div className="pos-product-accent"></div>
                                                 <div className="pos-product-image">
                                                     {item.image_url ? (
@@ -1697,9 +2105,9 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                                                     )}
                                                 </div>
                                                 <div className="pos-product-card-body">
-                                                    <div className="pos-product-meta">
+                                                        <div className="pos-product-meta">
                                                         <span className="pos-product-label">{productLabel}</span>
-                                                        <span className="pos-product-index">#{idx + 1}</span>
+                                                        <span className="pos-product-index">{item.item_type === "service" ? (item.category_name || "Service") : `#${idx + 1}`}</span>
                                                     </div>
                                                     <div className="pos-product-name" title={item.name}>{item.name}</div>
                                                     <div className="pos-product-bottom">
@@ -1707,14 +2115,15 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                                                         <div className="pos-product-qty">
                                                             <button
                                                                 type="button"
+                                                                disabled={inCartQty === 0}
                                                                 aria-label={`Decrease ${item.name}`}
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
-                                                                    const itemKey = `${item.item_type || 'product'}:${item.id}`;
-                                                                    const currentQty = Number((cart.find(c => this.getCartItemKey(c) === itemKey)?.pivot?.quantity) || 0);
-                                                                    this.handleChangeQty(itemKey, Math.max(1, currentQty - 1));
+                                                                    if (inCartQty > 1) this.handleChangeQty(itemKey, inCartQty - 1);
+                                                                    else if (inCartQty === 1) this.handleClickDelete(itemKey);
                                                                 }}
                                                             >-</button>
+                                                            {inCartQty > 0 && <span className="pos-product-qty-value">{inCartQty}</span>}
                                                             <button
                                                                 type="button"
                                                                 aria-label={`Increase ${item.name}`}
@@ -1780,14 +2189,16 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                                     <div className="pos-empty-cart">Cart is empty</div>
                                 ) : (
                                     cart.map(item => {
-                                        const unitPrice = Number(item.price ?? item.rate ?? 0);
+                                        const unitPrice = Number(item.price ?? item.discounted_amount ?? item.rate ?? 0);
                                         const qty = Number(item.pivot?.quantity || 0);
+                                        const isDeal = item.item_type === "deal" || Number(item.item_type) === 2;
+                                        const isService = item.item_type === "service" || Number(item.item_type) === 1;
                                         return (
                                             <div className="pos-order-item" key={this.getCartItemKey(item)}>
                                                 <div className="pos-order-item-header">
                                                     <div className="pos-order-item-copy">
                                                         <div className="pos-order-item-name">{item.name}</div>
-                                                        <div className="pos-order-item-type">{item.item_type === 'service' ? 'Service' : 'Item'}</div>
+                                                        <div className="pos-order-item-type">{isDeal ? 'Deal Package' : isService ? 'Service' : 'Product'}</div>
                                                     </div>
                                                     <button type="button" aria-label={`Remove ${item.name}`} onClick={() => this.handleClickDelete(this.getCartItemKey(item))} className="pos-order-remove"><SndIcon name="x" /></button>
                                                 </div>

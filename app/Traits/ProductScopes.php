@@ -45,14 +45,15 @@ trait ProductScopes
     public function scopeBestSelling(Builder $query): Builder
     {
         $sales = DB::table('order_items')
-            ->select('product_id', DB::raw('SUM(quantity) as total_sold'))
-            ->groupBy('product_id');
+            ->select('item_id', DB::raw('SUM(quantity) as total_sold'))
+            ->where('item_type', 0)
+            ->groupBy('item_id');
 
         return $query
             ->select('products.*')
             ->selectRaw('COALESCE(sales.total_sold, 0) as total_sold')
             ->leftJoinSub($sales, 'sales', function ($join): void {
-                $join->on('sales.product_id', '=', 'products.id');
+                $join->on('sales.item_id', '=', 'products.id');
             })
             ->orderByDesc('total_sold')
             ->limit(10);
@@ -64,17 +65,18 @@ trait ProductScopes
     public function scopeCurrentMonthBestSelling(Builder $query): Builder
     {
         $sales = DB::table('order_items')
-            ->select('order_items.product_id', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->select('order_items.item_id', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->where('order_items.item_type', 0)
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->whereYear('orders.created_at', now()->year)
             ->whereMonth('orders.created_at', now()->month)
-            ->groupBy('order_items.product_id');
+            ->groupBy('order_items.item_id');
 
         return $query
             ->select('products.*')
             ->selectRaw('COALESCE(sales.total_sold, 0) as total_sold')
             ->leftJoinSub($sales, 'sales', function ($join): void {
-                $join->on('sales.product_id', '=', 'products.id');
+                $join->on('sales.item_id', '=', 'products.id');
             })
             ->orderByDesc('total_sold')
             ->limit(10);
@@ -86,16 +88,17 @@ trait ProductScopes
     public function scopePastMonthsHotProducts(Builder $query): Builder
     {
         $sales = DB::table('order_items')
-            ->select('order_items.product_id', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->select('order_items.item_id', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->where('order_items.item_type', 0)
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.created_at', '>=', now()->subMonths(6))
-            ->groupBy('order_items.product_id');
+            ->groupBy('order_items.item_id');
 
         return $query
             ->select('products.*')
             ->selectRaw('COALESCE(sales.total_sold, 0) as total_sold')
             ->leftJoinSub($sales, 'sales', function ($join): void {
-                $join->on('sales.product_id', '=', 'products.id');
+                $join->on('sales.item_id', '=', 'products.id');
             })
             ->orderByDesc('total_sold')
             ->limit(10);

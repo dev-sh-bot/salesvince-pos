@@ -11,12 +11,25 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+        <form method="GET" action="{{ route('services.index') }}" class="form-inline mb-3">
+            <label for="service-category-filter" class="mr-2">Category</label>
+            <select id="service-category-filter" name="category_id" class="form-control mr-2" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ (string) request('category_id') === (string) $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+            @if (request('category_id'))
+                <a href="{{ route('services.index') }}" class="btn btn-outline-secondary">Clear filter</a>
+            @endif
+        </form>
         <div class="table-responsive snd-table-scroll">
         <table class="table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Image</th>
                     <th>Barcode</th>
                     <th>Rate</th>
@@ -30,6 +43,7 @@
                 <tr>
                     <td>{{ $service->id }}</td>
                     <td>{{ $service->name }}</td>
+                    <td>{{ $service->category?->name ?? '—' }}</td>
                     <td>
                         <img class="product-img" src="{{ $service->image_url }}" alt="{{ $service->name }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
                     </td>
@@ -46,7 +60,7 @@
                 </tr>
                 @empty
                 <tr class="snd-empty-row">
-                    <td colspan="8" class="snd-table-empty-cell">
+                    <td colspan="9" class="snd-table-empty-cell">
                         <x-snd-empty-state
                             icon="briefcase"
                             message="No services found."

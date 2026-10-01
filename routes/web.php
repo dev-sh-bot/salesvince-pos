@@ -11,7 +11,9 @@ use App\Http\Controllers\Management\PermissionController;
 use App\Http\Controllers\Management\RoleController;
 use App\Http\Controllers\Management\UserController;
 use App\Http\Controllers\Management\SupplierController;
+use App\Http\Controllers\Management\CategoryController;
 use App\Http\Controllers\Management\ServiceController;
+use App\Http\Controllers\Management\DealController;
 use App\Http\Controllers\Pos\BranchAccessController;
 use App\Http\Controllers\Pos\CartController;
 use App\Http\Controllers\Pos\OrderController;
@@ -66,13 +68,17 @@ Route::prefix('admin')->middleware(['auth', 'locale'])->group(function (): void 
     Route::post('counters/{counter}/assign-users', [CounterController::class, 'assignUsers'])->name('counters.assign-users');
 
     Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
     Route::resource('services', ServiceController::class);
+    Route::resource('deals', DealController::class);
+    Route::post('deals/{deal}/toggle-status', [DealController::class, 'toggleStatus'])->name('deals.toggle-status');
     Route::resource('customers', CustomerController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('suppliers', SupplierController::class);
 
     // POS Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart/categories', [CartController::class, 'categories'])->name('cart.categories');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::post('/cart/change-qty', [CartController::class, 'changeQty']);
     Route::delete('/cart/delete', [CartController::class, 'delete']);
