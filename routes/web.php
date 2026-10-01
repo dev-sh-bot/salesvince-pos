@@ -32,21 +32,12 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     Artisan::call('view:clear');
     Artisan::call('route:clear');
+    Artisan::call('migrate');
+    Artisan::call('db:seed');
 
-    // Delete existing public/storage link/folder
-    $storageLink = public_path('storage');
 
-    if (is_link($storageLink)) {
-        unlink($storageLink);
-    } elseif (File::isDirectory($storageLink)) {
-        File::deleteDirectory($storageLink);
-    }
-
-    // Create fresh storage link
-    Artisan::call('storage:link');
-
-    return "Cache cleared and storage link recreated.";
-});
+    return "Cache cleared, migrations applied, and seeders executed.";
+})->middleware(['auth', 'can:permissions.view']);
 
 Auth::routes();
 

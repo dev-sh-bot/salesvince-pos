@@ -107,13 +107,13 @@
                     </li>
                 @endcan
 
-                @can('reports.view')
+                {{-- @can('reports.view')
                     <li class="nav-item" data-label="{{ __('Reports') }}">
                         <a href="" class="nav-link {{ activeSegment('reports') }}" data-tooltip="{{ __('Reports') }}" title="{{ __('Reports') }}">
                             <x-snd-icon name="chart-bar" class="nav-icon" /><p>{{ __('Reports') }}</p>
                         </a>
                     </li>
-                @endcan
+                @endcan --}}
 
                 @can('branches.view')
                     <li class="nav-item" data-label="{{ __('Branches') }}">

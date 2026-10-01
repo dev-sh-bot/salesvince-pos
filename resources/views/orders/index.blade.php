@@ -124,7 +124,9 @@
                                 data-discount-amount="{{ $order->discount_amount ?? 0 }}"
                                 data-received="{{ $orderReceived }}"
                                 data-items="{{ base64_encode($order->items->toJson()) }}"
-                                data-created-at="{{ $order->created_at }}"
+                                data-created-at="{{ $order->created_at->format('m/d/Y, h:i:s A') . ' PST' }}"
+                                data-invoice-date="{{ $order->created_at->format('m/d/Y') }}"
+                                data-invoice-time="{{ $order->created_at->format('h:i:s A') }} PST"
                                 data-srb-invoice-id="{{ $order->srb_invoice_id ?? '' }}"
                                 data-srb-qr-link="{{ $order->srb_qr_code_link ?? '' }}"
                                 title="Print receipt">
@@ -257,7 +259,6 @@
                 currentInvoiceButton = button;
                 var orderId = button.data('order-id');
                 var invoiceNo = button.data('invoice-no');
-                var invoiceTitleNo = 'Order ID-' + String(orderId).padStart(4, '0');
                 var customerName = button.data('customer-name');
                 var branchName = button.data('branch-name');
                 var branchCode = button.data('branch-code');
@@ -406,11 +407,12 @@ function printThermalReceipt(button) {
     if (!button || !button.length) return;
     var orderId = button.data('order-id');
     var invoiceNo = button.data('invoice-no');
-    var invoiceTitleNo = 'Order ID-' + String(orderId).padStart(4, '0');
     var customerName = button.data('customer-name') || 'Walk-in Customer';
     var branchName = button.data('branch-name') || 'Main Branch';
     var branchAddress = button.data('branch-address') || '';
     var branchPhone = button.data('branch-phone') || '';
+    var invoiceDate = button.data('invoice-date') || '';
+    var invoiceTime = button.data('invoice-time') || '';
     var counterName = button.data('counter-name') || 'Counter 1';
     var subtotal = parseFloat(button.data('subtotal')) || 0;
     var taxPercent = parseFloat(button.data('tax-percent')) || 0;
@@ -449,7 +451,8 @@ function printThermalReceipt(button) {
         { label: 'Receipt No.', value: invoiceNo },
         // { label: 'Order ID', value: '#' + orderId }, 
         paymentStatus ? { label: 'Payment Status', value: paymentStatus } : null,
-        { label: 'Date', value: createdAt },
+        { label: 'Invoice Date', value: invoiceDate },
+        { label: 'Time', value: invoiceTime },
         { label: 'Terminal', value: counterName },
     { label: 'Customer', value: customerName },
     ].filter(Boolean);
@@ -465,7 +468,6 @@ function printThermalReceipt(button) {
     var receiptContent = '<div class="thermal-receipt">' +
         headerHTML +
         '<div class="receipt-divider"></div>' +
-        '<div class="invoice-number">*' + invoiceTitleNo + '*</div>' +
         '<div class="receipt-divider-double"></div>' +
         '<div class="meta-grid">' + metaHTML + '</div>' +
         '<div class="receipt-divider-double"></div>' +
@@ -489,9 +491,9 @@ function printThermalReceipt(button) {
         '<div class="receipt-divider-double"></div>' +
         '<div class="terms-block">' +
         '<div class="terms-title">Terms &amp; Conditions of Sale</div>' +
-        'No Refund.<br>' +
-        'Exchanges on unused products within 10 days only from the outlet where purchased.<br>' +
-        'Claim will not be accepted without Order List.' +
+        '-Amount against services and products are non refundable and non exchangeable.<br>' +
+        '-Advance payments for any service are non refundable.<br>' +
+        '-Make up advances are non refundable.' +
         '</div>' +
         srbSection +
         footerHTML +

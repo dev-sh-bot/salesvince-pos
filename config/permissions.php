@@ -71,14 +71,14 @@ return [
         'purchases.edit',
         'purchases.delete',
     ],
-    'inventory' => [
-        'inventory.view',
-        'inventory.create',
-        'inventory.edit',
-    ],
-    'reports' => [
-        'reports.view',
-    ],
+    // 'inventory' => [
+    //     'inventory.view',
+    //     'inventory.create',
+    //     'inventory.edit',
+    // ],
+    // 'reports' => [
+    //     'reports.view',
+    // ],
     'settings' => [
         'settings.view',
         'settings.edit',

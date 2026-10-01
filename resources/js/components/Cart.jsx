@@ -1,4 +1,4 @@
-﻿import React, { Component } from "react";
+import React, { Component } from "react";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -1763,24 +1763,18 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
             <div id="thermal-receipt" class="thermal-receipt">
                 ${headerHTML}
                 <div class="receipt-divider"></div>
-                <!---<div class="invoice-title">Sales Tax Invoice</div>!-->
-                <div class="invoice-number">*${invoiceTitleNo}*</div>
-            
-                <div class="receipt-divider-double"></div>
 
                 <div class="meta-grid">${metaHTML}</div>
-
                 <div class="receipt-divider-double"></div>
                 <div class="receipt-table-head"><span class="col-item">ITEM DESCRIPTION</span><span class="col-qty">QTY</span><span class="col-price">PRICE</span><span class="col-total">AMOUNT</span></div>
                 <div class="receipt-divider"></div>
                 ${items}
                 <div class="receipt-divider"></div>
-
                 <div class="receipt-summary">
                     <div class="summary-row"><span>SUBTOTAL:</span><span>${currency} ${subtotal.toFixed(2)}</span></div>
-                    ${taxAmount > 0 ? `<div class="summary-row"><span>Total Sales Tax (${taxPercent.toFixed(2)}%)</span><span>${currency} ${taxAmount.toFixed(2)}</span></div>` : ""}
                     ${discountAmount > 0 ? `<div class="summary-row"><span>Discount (${discountPercent.toFixed(2)}%)</span><span>-${currency} ${discountAmount.toFixed(2)}</span></div>` : ""}
                     ${discountAmount > 0 ? `<div class="summary-row"><span>Value for Sales</span><span>${currency} ${valueForSales.toFixed(2)}</span></div>` : ""}
+                    ${taxAmount > 0 ? `<div class="summary-row"><span>Total Sales Tax (${taxPercent.toFixed(2)}%)</span><span>${currency} ${taxAmount.toFixed(2)}</span></div>` : ""}
                     <div class="receipt-divider"></div>
                     <div class="summary-row"><span>Total Value Including Sales Tax</span><span>${currency} ${subtotal.toFixed(2)}</span></div>
                     <div class="receipt-divider"></div>
@@ -1794,17 +1788,16 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
 
                 <div class="terms-block">
                     <div class="terms-title">Terms &amp; Conditions of Sale</div>
-                    No Refund.<br>
-                    Exchanges on unused products within 10 days only from the outlet where purchased.<br>
-                    Claim will not be accepted without Sales Tax Invoice.
+                    -Amount against services and products are non refundable and non exchangeable.<br>
+                    -Advance payments for any service are non refundable.<br>
+                    -Make up advances are non refundable.
                 </div>
                 ${srbFooter}
-                 <div class="receipt-divider"></div>
+                <div class="receipt-divider"></div>
                 ${footerHTML}
             </div>`;
 
         Swal.fire({
-            // title: "Thermal Print Receipt",
             html: `<style>
                 .receipt-modal.swal2-popup {
                     background: #ffffff !important;
@@ -2357,7 +2350,7 @@ buildSrbBarcodeSvg(reference = "SRB-000000") {
                                 <div className="pos-action-grid">
                                     <button type="button" className="pos-secondary-action" onClick={() => this.state.cart.length ? this.handleClickSubmit() : this.state.lastPlacedOrder ? this.printReceipt(this.state.lastPlacedOrder) : this.handleClickSubmit()}><SndIcon name="printer" /> Print</button>
                                     <button type="button" className="pos-secondary-action" onClick={this.handleOpenLastInvoice}><SndIcon name="receipt" /> Invoice</button>
-                                    <button type="button" className="pos-secondary-action">Draft</button>
+                                    <button type="button" className="pos-secondary-action" onClick={() => Swal.fire({ icon: "info", title: "Draft Saved", text: "Your current cart items are saved in this POS session.", timer: 2000, showConfirmButton: false })}><SndIcon name="save" /> Draft</button>
                                 </div>
                             </div>
                         </aside>

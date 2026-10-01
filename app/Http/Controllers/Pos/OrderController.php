@@ -70,7 +70,7 @@ class OrderController extends Controller
                 $dailyInvoiceNumber = Order::whereDate('created_at', now()->toDateString())
                     ->lockForUpdate()
                     ->count();
-                $order->update(['invoice_no' => 'POS-' . str_pad((string) $dailyInvoiceNumber, 4, '0', STR_PAD_LEFT)]);
+                $order->update(['invoice_no' => 'POS-' . str_pad((string) max(1, $dailyInvoiceNumber), 4, '0', STR_PAD_LEFT)]);
 
                 // Get cart items
                 $cartItems = $this->cartItems($request->user()->id);
